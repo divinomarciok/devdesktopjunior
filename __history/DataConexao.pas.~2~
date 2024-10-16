@@ -1,0 +1,55 @@
+unit DataConexao;
+
+interface
+
+uses
+  System.SysUtils,Dialogs, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  FireDAC.Phys.PGDef, FireDAC.Phys.PG, Data.DB, FireDAC.Comp.Client;
+
+type
+  TServiceConexao = class(TDataModule)
+    FDConnection: TFDConnection;
+    FDPhysPgDriverLink: TFDPhysPgDriverLink;
+  private
+    { Private declarations }
+    DBConnect: TFDConnection;
+  public
+    { Public declarations }
+    procedure ConectaBancoPostgres;
+
+  end;
+
+var
+  ServiceConexao: TServiceConexao;
+
+implementation
+
+
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+procedure TServiceConexao.ConectaBancoPostgres;
+begin
+
+try
+      DBConnect.DriverName := 'PG';
+      DBConnect.Params.Database := 'EnderecosViaCep';
+      DBConnect.Params.UserName := 'postgres';
+      DBConnect.Params.Password := 'postgres';
+      DBConnect.Params.Add('Server=localhost');
+      DBConnect.Params.Add('Port=5432');
+      DBConnect.Connected := True;
+
+      ShowMessage('conectado ao banco');
+
+  except on E: Exception do
+    ShowMessage('Erro ao conectar com banco de dados ' +E.Message);
+  end;
+
+end;
+
+{$R *.dfm}
+
+end.

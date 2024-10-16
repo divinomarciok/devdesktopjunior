@@ -1,0 +1,72 @@
+unit uConexaoDB;
+
+interface
+
+uses
+  FireDAC.Comp.Client, FireDAC.Stan.Def, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Phys.PG, System.SysUtils, System.Classes, FireDAC.Phys;
+
+type
+  TuConexaoDB = class
+  private
+    DBConnect: TFDConnection;
+    FDriverLink: TFDPhysPgDriverLink;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure ConectaPostgres;
+    procedure DesconectaPostgres;
+  end;
+
+implementation
+
+constructor TuConexaoDB.Create;
+begin
+  inherited Create;
+
+  // Criação e configuração do DBConnect
+  DBConnect := TFDConnection.Create(nil);
+  FDriverLink := TFDPhysPgDriverLink.Create(nil);
+  try
+    // Configuração do driver
+    DBConnect.DriverName := 'PG';
+    DBConnect.Params.Database := 'EnderecosViaCep';
+    DBConnect.Params.UserName := 'postgres';
+    DBConnect.Params.Password := 'postgres';
+    DBConnect.Params.Add('Server=localhost');
+    DBConnect.Params.Add('Port=5432');
+  except
+    on E: Exception do
+      raise Exception.Create('Erro ao configurar a conexão: ' + E.Message);
+  end;
+end;
+
+destructor TuConexaoDB.Destroy;
+begin
+  if DBConnect.Connected then
+    DBConnect.Connected := False;
+
+  DBConnect.Free;
+  FDriverLink.Free; // Libera o Driver Link se for utilizado
+
+  inherited Destroy; // Chama o destrutor da classe base
+end;
+
+procedure TuConexaoDB.ConectaPostgres;
+begin
+  try
+    DBConnect.Connected := True; // Tenta conectar
+    WriteLn('Conexão com banco OK');
+  except
+    on E: Exception do
+      raise Exception.Create('Erro ao conectar: ' + E.Message);
+  end;
+end;
+
+procedure TuConexaoDB.DesconectaPostgres;
+begin
+  if DBConnect.Connected then
+    DBConnect.Connected := False;
+end;
+
+end.

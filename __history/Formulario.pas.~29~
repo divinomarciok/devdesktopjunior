@@ -1,0 +1,70 @@
+unit Formulario;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,uConexaoDB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.VCLUI.Wait, FireDAC.Phys.PGDef, FireDAC.Phys.PG, Vcl.StdCtrls,
+  Data.DB, FireDAC.Comp.Client;
+type
+  TFormEndereco = class(TForm)
+
+    TesteConecta: TButton;
+    procedure TesteConectaClick(Sender: TObject);
+
+  private
+    { Private declarations }
+    // FConexao: TuConexaoDB;
+  public
+
+    //FDConnection: TFDConnection;
+   // FDPhysPgDriverLink: TFDPhysPgDriverLink;
+
+  procedure ConectaBancoPostgres;
+    { Public declarations }
+  end;
+
+var
+  FormEndereco: TFormEndereco;
+
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormEndereco.ConectaBancoPostgres;
+begin
+  try
+
+  //FConexao.ConectaPostgres();
+  {FDConnection.Params.Add('DriverID=PG');
+  FDConnection.Params.DriverID := 'PG';
+  FDConnection.Params.Database := 'EnderecosViaCep';
+  FDConnection.Params.UserName := 'postgres';
+  FDConnection.Params.Password := 'postgres';
+  FDConnection.Params.Add('Server=localhost');
+  FDConnection.Params.Add('Port=5432');
+  FDConnection.Connected := True;    }
+
+  ShowMessage('Conectado ao banco com sucesso');
+
+except
+   on E: Exception do
+  ShowMessage('Erro ao conectar ao banco de dados: '+ E.message);
+end;
+
+end;
+
+
+
+
+
+procedure TFormEndereco.TesteConectaClick(Sender: TObject);
+begin
+  //ConectaBancoPostgres;
+end;
+
+end.

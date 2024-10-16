@@ -1,0 +1,89 @@
+unit uConexaoDB;
+
+interface
+
+uses
+  FireDAC.Comp.Client, FireDAC.Stan.Def, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Phys.PG,
+  System.SysUtils, System.Classes, FireDAC.Phys;
+
+  type
+
+TuConexaoDB = class
+
+
+
+private
+
+public
+DBConnect : TFDConnection;
+FDriverLink: TFDPhysPgDriverLink;
+
+constructor Create;
+destructor Destroy; override;
+procedure ConectaPostgres;
+procedure DesconectaPostgres;
+
+
+end;
+
+  implementation
+
+
+constructor TuConexaoDB.Create;
+begin
+
+  inherited Create;
+
+  try
+
+  DBConnect := TFDConnection.Create(nil);
+  FDriverLink := TFDPhysPgDriverLink.Create(nil);
+
+  //DBConnect.Params.Add('DriverID=PG');
+
+  DBConnect.Params.DriverID := 'PG';
+  DBConnect.Params.Database := 'EnderecosViaCep';
+  DBConnect.Params.UserName := 'postgres';
+  DBConnect.Params.Password := 'postgres';
+  DBConnect.Params.Add('Server=localhost');
+  DBConnect.Params.Add('Port=5432');
+  except
+    on E: Exception do
+    raise Exception.Create('Erro ao conectar ao banco' + E.Message);
+  end;
+
+  //DBConnect.Connected := True;
+
+end;
+
+destructor TuConexaoDB.Destroy;
+begin
+
+if  DBConnect.Connected then
+    DBConnect.Connected := False;
+    DBConnect.Free;
+    inherited;
+end;
+
+procedure TuConexaoDB.ConectaPostgres;
+begin
+  try
+
+    DBConnect.Connected := True;
+    WriteLn('Conexão com banco OK');
+
+  except
+  on E: Exception do
+  raise Exception.Create('Erro ao conectar: ' + E.Message);
+  end;
+end;
+
+
+procedure TuConexaoDB.DesconectaPostgres;
+begin
+  if  DBConnect.Connected then
+      DBConnect.Connected := False;
+end;
+
+
+end.

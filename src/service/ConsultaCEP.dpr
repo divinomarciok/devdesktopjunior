@@ -1,0 +1,17 @@
+program ConsultaCEP;
+
+uses
+  Vcl.Forms,
+  Formulario in '..\..\Formulario.pas' {FormEndereco},
+  Endereco_class in '..\..\Endereco_class.pas',
+  DataConexao in 'DataConexao.pas' {ServiceConexao: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFormEndereco, FormEndereco);
+  Application.CreateForm(TServiceConexao, ServiceConexao);
+  Application.Run;
+end.

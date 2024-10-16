@@ -1,0 +1,44 @@
+unit Formulario;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, DataConexao;
+type
+  TFormEndereco = class(TForm)
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+   ServiceDB : TServiceConexao;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormEndereco: TFormEndereco;
+
+
+implementation
+
+{$R *.dfm}
+
+
+
+
+
+
+
+
+procedure TFormEndereco.Button1Click(Sender: TObject);
+begin
+    ServiceConexao.ConectaBancoPostgres;
+end;
+
+procedure TFormEndereco.FormCreate(Sender: TObject);
+begin
+      ServiceConexao.ConectaBancoPostgres;
+end;
+
+end.

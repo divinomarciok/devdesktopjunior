@@ -1,0 +1,86 @@
+unit DataConexao;
+
+interface
+
+uses
+  System.SysUtils,Dialogs, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  FireDAC.Phys.PGDef, FireDAC.Phys.PG, Data.DB, FireDAC.Comp.Client,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.DataSet;
+
+type
+  TServiceConexao = class(TDataModule)
+    ConexaoDB: TFDConnection;
+    FDPhysPgDriverLink: TFDPhysPgDriverLink;
+    QRY_migration: TFDQuery;
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+    procedure ConectaBancoPostgres;
+    procedure CriarTabelaEndereco;
+  end;
+
+var
+  ServiceConexao: TServiceConexao;
+
+implementation
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+procedure TServiceConexao.ConectaBancoPostgres;
+begin
+try
+      ConexaoDB.DriverName := 'PG';
+      ConexaoDB.Params.Database := 'EnderecosViaCep';
+      ConexaoDB.Params.UserName := 'postgres';
+      ConexaoDB.Params.Password := 'postgres';
+      ConexaoDB.Params.Add('Server=localhost');
+      ConexaoDB.Params.Add('Port=5432');
+      ConexaoDB.Connected := True;
+
+      ShowMessage('conectado ao banco');
+
+  except on E: Exception do
+    ShowMessage('Erro ao conectar com banco de dados ' +E.Message);
+  end;
+
+end;
+
+
+procedure TServiceConexao.CriarTabelaEndereco;
+begin
+  try
+    // Use o componente TFDQuery para executar a criação da tabela
+   QRY_migration.SQL.Text :=
+      'CREATE TABLE IF NOT EXISTS TspdCep  (' +
+      'ID SERIAL PRIMARY KEY, ' +          // ID auto-incremento
+      'cep VARCHAR(9), ' +                 // Campo CEP (inclui hífen)
+      'logradouro VARCHAR(100), ' +        // Campo Logradouro
+      'complemento VARCHAR(100), ' +       // Campo Complemento
+      'bairro VARCHAR(100), ' +            // Campo Bairro
+      'localidade VARCHAR(100), ' +        // Campo Localidade (Cidade)
+      'uf VARCHAR(2), ' +                  // Campo UF (Estado, 2 letras)
+      'ibge VARCHAR(7), ' +                // Campo IBGE (até 7 dígitos)
+      'gia VARCHAR(5), ' +                 // Campo GIA (até 5 dígitos)
+      'ddd VARCHAR(3), ' +                 // Campo DDD (até 3 dígitos)
+      'siafi VARCHAR(5)' +                 // Campo SIAFI (até 5 dígitos)
+      ')';
+
+
+    QRY_migration.ExecSQL; // Executa o comando SQL
+
+    ShowMessage('Tabela Endereco criada com sucesso.');
+  except
+    on E: Exception do
+      ShowMessage('Erro ao criar tabela: ' + E.Message);
+  end;
+end;
+
+
+
+{$R *.dfm}
+
+end.

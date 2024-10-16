@@ -1,0 +1,24 @@
+object FormEndereco: TFormEndereco
+  Left = 0
+  Top = 0
+  Caption = 'Formulario'
+  ClientHeight = 300
+  ClientWidth = 683
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OnCreate = FormCreate
+  TextHeight = 15
+  object Button1: TButton
+    Left = 264
+    Top = 144
+    Width = 177
+    Height = 25
+    Caption = 'Conecta ao banco'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+end

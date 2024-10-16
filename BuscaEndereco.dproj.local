@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2024/10/15 20:06:31.379,=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 20:09:10.186,C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Enderecos.dfm=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2024/10/15 20:09:10.186,C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Enderecos.pas=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 20:09:45.947,=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 20:10:04.491,C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Formulario.pas=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Enderecos.pas</Transaction>
+    <Transaction>2024/10/15 20:10:04.491,C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Formulario.dfm=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Enderecos.dfm</Transaction>
+    <Transaction>2024/10/15 20:10:36.624,C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Endereco_class.pas=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 20:42:25.911,D:\Divino\TesteTecno\devdesktopjunior\Formulario.dfm=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Formulario.dfm</Transaction>
+    <Transaction>2024/10/15 20:42:25.911,D:\Divino\TesteTecno\devdesktopjunior\Formulario.pas=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Formulario.pas</Transaction>
+    <Transaction>2024/10/15 20:42:31.773,D:\Divino\TesteTecno\devdesktopjunior\Endereco_class.pas=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Endereco_class.pas</Transaction>
+    <Transaction>2024/10/15 20:42:36.329,D:\Divino\TesteTecno\devdesktopjunior\Project1.dproj=C:\Users\divin\OneDrive\Documentos\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2024/10/15 21:25:17.163,=D:\Divino\TesteTecno\devdesktopjunior\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 21:25:31.432,D:\Divino\TesteTecno\devdesktopjunior\uDB.pas=D:\Divino\TesteTecno\devdesktopjunior\Unit1.pas</Transaction>
+    <Transaction>2024/10/15 22:14:29.228,D:\Divino\TesteTecno\devdesktopjunior\BuscaEndereco.dproj=D:\Divino\TesteTecno\devdesktopjunior\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

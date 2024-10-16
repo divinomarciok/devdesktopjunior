@@ -1,0 +1,15 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  Formulario in 'Formulario.pas' {FormEndereco},
+  Endereco_class in 'Endereco_class.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFormEndereco, FormEndereco);
+  Application.Run;
+end.

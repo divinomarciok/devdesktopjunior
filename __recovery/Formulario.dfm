@@ -1,0 +1,31 @@
+object FormEndereco: TFormEndereco
+  Left = 0
+  Top = 0
+  Caption = 'Formulario'
+  ClientHeight = 300
+  ClientWidth = 683
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object testeConecta: TButton
+    Left = 152
+    Top = 160
+    Width = 321
+    Height = 25
+    Caption = 'Teste Conectar banco'
+    TabOrder = 0
+    OnClick = testeConectaClick
+  end
+  object FDConnection: TFDConnection
+    Left = 432
+    Top = 56
+  end
+  object FDPhysPgDriverLink: TFDPhysPgDriverLink
+    Left = 520
+    Top = 152
+  end
+end

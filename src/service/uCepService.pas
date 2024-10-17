@@ -2,21 +2,16 @@ unit uCepService;
 
 interface
 uses
-System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs;
-
-
+System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs,moduleSQL;
 
 type
 TCepService = class
 
+private
+
 public
 
-EnderecoViaCep: TEndereco_class;
-//procedure consultaCep(const ACep: string);
-procedure criaEndereco;
-
 function ConsultaCep(const ACep: string): TEndereco_class;
-
 
 end;
 
@@ -27,21 +22,7 @@ var
 implementation
 
 
-procedure TCepService.criaEndereco;
-begin
 
-Endereco := TEndereco_class.Create(    '01001-000',    // cep
-    'Praça da Sé',  // logradouro
-    '',             // complemento
-    'Sé',           // bairro
-    'São Paulo',    // localidade
-    'SP',           // uf
-    '3550308',      // ibge
-    '',             // gia
-    '11',           // ddd
-    '7107'          // siafi
-    );
-end;
 
 function TCepService.ConsultaCep(const ACep :string): TEndereco_class;
 var
@@ -79,25 +60,12 @@ try
               );
 
               Result := Endereco;
+              ServiceConexao.InserirEndereco(Endereco);
             end;
 
           finally
            JSONVAlue.Free;
           end;
-
-          {try
-             if Assigned(JSONValue) then
-             begin
-
-               ShowMessage('Logradouro: ' + JSONValue.GetValue<string>('logradouro') + sLineBreak +
-                      'Bairro: ' + JSONValue.GetValue<string>('bairro') + sLineBreak +
-                      'Localidade: ' + JSONValue.GetValue<string>('localidade') + sLineBreak +
-                      'UF: ' + JSONValue.GetValue<string>('uf'));
-             end;
-
-          finally
-            JSONValue.Free;
-          end; }
 
         end
         else

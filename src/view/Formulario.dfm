@@ -34,7 +34,7 @@ object FormEndereco: TFormEndereco
     Left = 24
     Top = 56
     Width = 185
-    Height = 25
+    Height = 23
     EditLabel.Width = 21
     EditLabel.Height = 15
     EditLabel.Caption = 'CEP'

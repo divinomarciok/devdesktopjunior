@@ -4,8 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, DataConexao,uCepService, Vcl.Mask,
-  Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, moduleSQL,uCepService, Vcl.Mask, Vcl.ExtCtrls,Endereco_class;
 type
   TFormEndereco = class(TForm)
     Button1: TButton;
@@ -30,8 +29,13 @@ implementation
 {$R *.dfm}
 
 procedure TFormEndereco.btnConsultaAPIClick(Sender: TObject);
+var
+
+EnderecoObjeto: TEndereco_class;
 begin
-        CepService.consultaCep(edtCep.Text);
+   EnderecoObjeto := CepService.consultaCep(edtCep.Text);
+
+   ShowMessage(EnderecoObjeto.cep);
 end;
 
 procedure TFormEndereco.Button1Click(Sender: TObject);

@@ -116,13 +116,11 @@ begin
 
   if Value = '' then
   begin
-    ShowMessage('passaqi');
     complemento  := 'Sem complemento';
   end
   else
   begin
-    ShowMessage('passaqi2');
-      Fcomplemento := Value;
+       Fcomplemento := Value;
   end;
 
 
@@ -220,8 +218,8 @@ function TEndereco_class.ToString: string;
 var
 complento :string;
 begin
-  Result := Format(' CEP: %s %s Logradouro: %s %s Complemento: %s %s Bairro: %s %s Localidade: %s %s UF: %s %s IBGE: %s %s GIA: %s %s DDD: %s %s SIAFI: %s ',
-                   [cep,sLineBreak, logradouro,sLineBreak, complemento, sLineBreak, bairro,sLineBreak, localidade,sLineBreak,uf,sLineBreak, ibge,sLineBreak, gia,sLineBreak, ddd,sLineBreak, siafi]);
+  Result := Format('%s CEP: %s %s Logradouro: %s %s Complemento: %s %s Bairro: %s %s Localidade: %s %s UF: %s %s IBGE: %s %s GIA: %s %s DDD: %s %s SIAFI: %s %s',
+                   [sLineBreak,cep,sLineBreak, logradouro,sLineBreak, complemento, sLineBreak, bairro,sLineBreak, localidade,sLineBreak,uf,sLineBreak, ibge,sLineBreak, gia,sLineBreak, ddd,sLineBreak, siafi,sLineBreak]);
 end;
 
 

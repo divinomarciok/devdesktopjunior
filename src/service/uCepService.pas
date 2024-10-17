@@ -2,7 +2,7 @@ unit uCepService;
 
 interface
 uses
-System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs,moduleSQL;
+System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs,moduleSQL,System.Generics.Collections;
 
 type
 TCepService = class
@@ -12,6 +12,7 @@ private
 public
 
 function ConsultaCep(const ACep: string): TEndereco_class;
+function ConsultaCepUf(const AUf: string): TEndereco_class;
 procedure criaEndereco;
 
 end;
@@ -65,12 +66,6 @@ try
 
               Result := Endereco;
 
-              resultado := ServiceConexao.InserirouAtualiza(Endereco);
-
-              if resultado then
-              begin
-              //  ShowMessage('Cep Inserido no Banco');
-              end;
 
             end;
 
@@ -86,6 +81,29 @@ try
 finally
     HTTPClient.Free;
 end;
+
+end;
+
+
+function TCepService.ConsultaCepUf(const AUf: string): TEndereco_class;
+var
+ListaEnderecos : TList<TEndereco_class>;
+EnderecoUF: TEndereco_class;
+
+uf : string;
+I: Integer;
+begin
+  uf:= AUf;
+
+  ListaEnderecos:=  moduloSQL.SelectCePUf(uf);
+
+for EnderecoUF in ListaEnderecos do
+begin
+
+end;
+
+
+
 
 end;
 

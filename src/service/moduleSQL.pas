@@ -8,13 +8,14 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   FireDAC.Phys.PGDef, FireDAC.Phys.PG, Data.DB, FireDAC.Comp.Client,
   FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
-  FireDAC.Comp.DataSet,Endereco_class;
+  FireDAC.Comp.DataSet,Endereco_class,System.Generics.Collections;
 
 type
   TServiceConexao = class(TDataModule)
     ConexaoDB: TFDConnection;
     FDPhysPgDriverLink: TFDPhysPgDriverLink;
     QRY_migration: TFDQuery;
+
 
   private
     { Private declarations }
@@ -23,12 +24,12 @@ type
     { Public declarations }
     procedure ConectaBancoPostgres;
     procedure CriarTabelaEndereco;
-    function ConsultaBancoCep(const ACep: string): TEndereco_class;
+    function SelectCePUf(const AUf: string): TList<TEndereco_class>;
     function InserirouAtualiza(const Endereco: TEndereco_class): boolean;
   end;
 
 var
-  ServiceConexao: TServiceConexao;
+  moduloSQL: TServiceConexao;
 
 implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
@@ -73,6 +74,7 @@ begin
       ')';
 
     QRY_migration.ExecSQL;
+    QRY_migration.Close;
 
     ShowMessage('Tabela "TspdCep" criada com sucesso!');
   except
@@ -102,20 +104,64 @@ try
     QRY_migration.ParamByName('ibge').AsString := Endereco.ibge;
     QRY_migration.ParamByName('ddd').AsString := Endereco.ddd;
     QRY_migration.ExecSQL;
+    QRY_migration.Close;
     Result:= True;
   except
     on E: Exception do
-      ShowMessage('Erro ao Inserir Registro SQL : ' + E.Message);
+       raise Exception.Create('Erro ao Inserir Registro SQL : ' + E.Message);
    end;
 end;
 
 
 
-function TServiceConexao.ConsultaBancoCep(const ACep:string): TEndereco_class;
+function TServiceConexao.SelectCePUf(const AUf:string): TList<TEndereco_class>;
+var
 
+Endereco_banco : TEndereco_class;
+ListaEnderecos : TList<TEndereco_class>;
 
 begin
-     ShowMessage('teste');
+
+    QRY_migration.SQL.Text :='SELECT * FROM TspdCep WHERE uf = :UF';
+    QRY_migration.ParamByName('UF').AsString := 'PR';
+    QRY_migration.Open;
+
+    if not QRY_migration.IsEmpty then
+    begin
+      ListaEnderecos := TList<TEndereco_class>.Create;
+      QRY_migration.First;
+
+       while not QRY_migration.Eof do
+       begin
+
+         Endereco_banco := TEndereco_class.Create(
+         QRY_migration.FieldByName('cep').AsString,
+         QRY_migration.FieldByName('logradouro').AsString,
+         QRY_migration.FieldByName('complemento').AsString,
+         QRY_migration.FieldByName('bairro').AsString,
+         QRY_migration.FieldByName('localidade').AsString,
+         QRY_migration.FieldByName('uf').AsString,
+         QRY_migration.FieldByName('ibge').AsString,
+         QRY_migration.FieldByName('gia').AsString,
+         QRY_migration.FieldByName('ddd').AsString,
+         QRY_migration.FieldByName('siafi').AsString
+         );
+
+         //ShowMessage(Endereco_banco.ToString);
+
+         ListaEnderecos.Add(Endereco_banco);
+         Endereco_banco.Free;
+       end;
+
+    end
+    else
+    begin
+      ShowMessage('Sem Resultado para Consulta');
+    end;
+
+     QRY_migration.Close;
+     Result:=ListaEnderecos;
+
 end;
 
 {$R *.dfm}

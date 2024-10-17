@@ -1,0 +1,85 @@
+unit Formulario;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, moduleSQL,uCepService, Vcl.Mask, Vcl.ExtCtrls,Endereco_class;
+type
+  TFormEndereco = class(TForm)
+    btnCriaTabelaTspdCep: TButton;
+    edtCep: TLabeledEdit;
+    memoRetorno: TMemo;
+    btnCriaEndereco: TButton;
+    btnConsultaSalva: TButton;
+    edtUf: TLabeledEdit;
+    Button1: TButton;
+ 
+    procedure FormCreate(Sender: TObject);
+
+    procedure btnCriaTabelaTspdCepClick(Sender: TObject);
+    procedure btnCriaEnderecoClick(Sender: TObject);
+    procedure btnConsultaSalvaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+  private
+    FURLConsulta: string;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormEndereco: TFormEndereco;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TFormEndereco.btnConsultaSalvaClick(Sender: TObject);
+var
+EnderecoObjeto: TEndereco_class;
+begin
+
+   EnderecoObjeto := CepService.consultaCep(edtCep.Text);
+
+   if moduloSQL.InserirouAtualiza(EnderecoObjeto) then
+   begin
+    memoRetorno.Text:=(EnderecoObjeto.cep +' Registro Inserido no banco de dados');
+   end
+   else
+   begin
+     raise Exception.Create('Erro ao inserir no banco. Dados do Objeto :  '+EnderecoObjeto.ToString)
+   end;
+
+
+end;
+
+procedure TFormEndereco.btnCriaEnderecoClick(Sender: TObject);
+begin
+try
+      CepService.criaEndereco;
+except
+  on E: Exception do
+    ShowMessage('Erro ao criar objeto endereco : '+E.Message);
+  end;
+
+
+end;
+
+procedure TFormEndereco.btnCriaTabelaTspdCepClick(Sender: TObject);
+begin
+    moduloSQL.CriarTabelaEndereco;
+end;
+
+procedure TFormEndereco.Button1Click(Sender: TObject);
+begin
+    moduloSQL.SelectCePUf('GO');
+end;
+
+procedure TFormEndereco.FormCreate(Sender: TObject);
+begin
+   moduloSQL.ConectaBancoPostgres;
+end;
+
+end.

@@ -13,7 +13,7 @@ object FormEndereco: TFormEndereco
   OnCreate = FormCreate
   TextHeight = 15
   object btnCriaTabelaTspdCep: TButton
-    Left = 96
+    Left = 128
     Top = 16
     Width = 153
     Height = 18
@@ -22,9 +22,9 @@ object FormEndereco: TFormEndereco
     OnClick = btnCriaTabelaTspdCepClick
   end
   object edtCep: TLabeledEdit
-    Left = 40
-    Top = 72
-    Width = 185
+    Left = 8
+    Top = 36
+    Width = 105
     Height = 23
     EditLabel.Width = 21
     EditLabel.Height = 15
@@ -46,21 +46,41 @@ object FormEndereco: TFormEndereco
     TabOrder = 2
   end
   object btnCriaEndereco: TButton
-    Left = 152
+    Left = 128
     Top = 40
-    Width = 97
+    Width = 153
     Height = 16
     Caption = 'Cria Endereco'
     TabOrder = 3
     OnClick = btnCriaEnderecoClick
   end
   object btnConsultaSalva: TButton
-    Left = 72
-    Top = 101
-    Width = 114
+    Left = 8
+    Top = 65
+    Width = 89
     Height = 25
-    Caption = 'Consulta e Salva '
+    Caption = 'Consulta API'
     TabOrder = 4
     OnClick = btnConsultaSalvaClick
+  end
+  object edtUf: TLabeledEdit
+    Left = 8
+    Top = 112
+    Width = 89
+    Height = 23
+    EditLabel.Width = 14
+    EditLabel.Height = 15
+    EditLabel.Caption = 'UF'
+    TabOrder = 5
+    Text = ''
+  end
+  object Button1: TButton
+    Left = 128
+    Top = 111
+    Width = 141
+    Height = 25
+    Caption = 'Consulta Banco'
+    TabOrder = 6
+    OnClick = Button1Click
   end
 end

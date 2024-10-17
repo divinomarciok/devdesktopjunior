@@ -12,7 +12,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TServiceConexao, ServiceConexao);
+  Application.CreateForm(TServiceConexao, moduloSQL);
   Application.CreateForm(TFormEndereco, FormEndereco);
   Application.Run;
 end.

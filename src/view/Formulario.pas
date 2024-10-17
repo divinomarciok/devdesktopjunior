@@ -12,12 +12,15 @@ type
     memoRetorno: TMemo;
     btnCriaEndereco: TButton;
     btnConsultaSalva: TButton;
+    edtUf: TLabeledEdit;
+    Button1: TButton;
  
     procedure FormCreate(Sender: TObject);
 
     procedure btnCriaTabelaTspdCepClick(Sender: TObject);
     procedure btnCriaEnderecoClick(Sender: TObject);
     procedure btnConsultaSalvaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     FURLConsulta: string;
   public
@@ -27,22 +30,28 @@ type
 var
   FormEndereco: TFormEndereco;
 
-
 implementation
 
 {$R *.dfm}
 
 
 
-
-
 procedure TFormEndereco.btnConsultaSalvaClick(Sender: TObject);
 var
-
 EnderecoObjeto: TEndereco_class;
 begin
+
    EnderecoObjeto := CepService.consultaCep(edtCep.Text);
-    memoRetorno.Text := EnderecoObjeto.ToString;
+
+   if moduloSQL.InserirouAtualiza(EnderecoObjeto) then
+   begin
+    memoRetorno.Text:=('[REGISTRO INSERIDO / ATUALIZADO]'+EnderecoObjeto.ToString);
+   end
+   else
+   begin
+     raise Exception.Create('Erro ao inserir no banco. Dados do Objeto :  '+EnderecoObjeto.ToString)
+   end;
+
 
 end;
 
@@ -60,12 +69,17 @@ end;
 
 procedure TFormEndereco.btnCriaTabelaTspdCepClick(Sender: TObject);
 begin
-    ServiceConexao.CriarTabelaEndereco;
+    moduloSQL.CriarTabelaEndereco;
+end;
+
+procedure TFormEndereco.Button1Click(Sender: TObject);
+begin
+    CepService.ConsultaCepUf('GO');
 end;
 
 procedure TFormEndereco.FormCreate(Sender: TObject);
 begin
-      ServiceConexao.ConectaBancoPostgres;
+   moduloSQL.ConectaBancoPostgres;
 end;
 
 end.

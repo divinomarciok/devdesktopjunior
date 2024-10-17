@@ -3,8 +3,9 @@ program ConsultaCEP;
 uses
   Vcl.Forms,
   Formulario in 'Formulario.pas' {FormEndereco},
-  Endereco_class in '..\service\Endereco_class.pas',
-  DataConexao in '..\service\DataConexao.pas' {ServiceConexao: TDataModule};
+  Endereco_class in '..\model\Endereco_class.pas',
+  DataConexao in '..\service\DataConexao.pas' {ServiceConexao: TDataModule},
+  uCepService in '..\service\uCepService.pas';
 
 {$R *.res}
 

@@ -1,0 +1,32 @@
+unit uCepService;
+
+interface
+
+uses
+System.SysUtils,System.Net.HttpClient,Endereco_class;
+
+var
+  Endereco: TEndereco_class;
+type
+TCepService = class
+
+
+public
+
+EnderecoViaCep: TEndereco_class;
+
+procedure criaEndereco;
+
+
+end;
+
+implementation
+
+
+procedure TCepService.criaEndereco;
+begin
+
+end;
+
+
+end.

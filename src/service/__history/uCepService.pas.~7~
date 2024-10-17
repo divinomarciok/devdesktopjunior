@@ -1,0 +1,45 @@
+unit uCepService;
+
+interface
+uses
+System.SysUtils,System.Net.HttpClient,Endereco_class;
+
+var
+  Endereco: TEndereco_class;
+type
+TCepService = class
+
+public
+
+EnderecoViaCep: TEndereco_class;
+
+procedure criaEndereco;
+function consultaCep: string;
+
+end;
+
+implementation
+
+
+procedure TCepService.criaEndereco;
+begin
+
+Endereco := TEndereco_class.Create(    '01001-000',    // cep
+    'Praça da Sé',  // logradouro
+    '',             // complemento
+    'Sé',           // bairro
+    'São Paulo',    // localidade
+    'SP',           // uf
+    '3550308',      // ibge
+    '',             // gia
+    '11',           // ddd
+    '7107'          // siafi
+    );
+end;
+
+function TCepService.consultaCep(): string ;
+begin
+
+end;
+
+end.

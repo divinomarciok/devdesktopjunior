@@ -1,0 +1,19 @@
+unit uCepService;
+
+interface
+
+uses
+System.SysUtils,System.Net.HttpClient,Endereco_class;
+
+type
+TCepService = class
+
+public
+
+end;
+
+implementation
+
+
+
+end.

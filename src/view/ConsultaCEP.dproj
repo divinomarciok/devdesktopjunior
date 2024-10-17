@@ -107,6 +107,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -128,12 +130,13 @@
             <Form>FormEndereco</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\service\Endereco_class.pas"/>
+        <DCCReference Include="..\model\Endereco_class.pas"/>
         <DCCReference Include="..\service\DataConexao.pas">
             <Form>ServiceConexao</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="..\service\uCepService.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

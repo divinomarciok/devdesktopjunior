@@ -1,0 +1,86 @@
+unit uCepService;
+
+interface
+uses
+System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs;
+
+var
+  Endereco: TEndereco_class;
+type
+TCepService = class
+
+public
+
+EnderecoViaCep: TEndereco_class;
+procedure consultaCep(const ACep: string);
+procedure criaEndereco;
+
+
+end;
+
+implementation
+
+
+procedure TCepService.criaEndereco;
+begin
+
+Endereco := TEndereco_class.Create(    '01001-000',    // cep
+    'Praça da Sé',  // logradouro
+    '',             // complemento
+    'Sé',           // bairro
+    'São Paulo',    // localidade
+    'SP',           // uf
+    '3550308',      // ibge
+    '',             // gia
+    '11',           // ddd
+    '7107'          // siafi
+    );
+end;
+
+procedure TCepService.consultaCep(const ACep :string);
+var
+HTTPClient: THTTPClient;
+Response: IHTTPResponse;
+JSONValue: TJSONValue;
+URL: string;
+
+begin
+     HTTPClient := THTTPClient.Create;
+try
+
+       URL :='https://viacep.com.br/ws/' + ACep + '/json';
+       Response := HTTPClient.Get(URL);
+
+       if Response.StatusCode = 200 then
+        begin
+
+          JSONValue := TJSONObject.ParseJSONValue(Response.ContentAsString);
+
+          try
+             if Assigned(JSONValue) then
+             begin
+               ShowMessage('Logradouro: ' + JSONValue.GetValue<string>('logradouro') + sLineBreak +
+                      'Bairro: ' + JSONValue.GetValue<string>('bairro') + sLineBreak +
+                      'Localidade: ' + JSONValue.GetValue<string>('localidade') + sLineBreak +
+                      'UF: ' + JSONValue.GetValue<string>('uf'));
+             end;
+
+          finally
+            JSONValue.Free;
+          end;
+
+        end
+        else
+        begin
+          ShowMessage('Erro ao consultar o CEP: ' + Response.StatusText);
+        end;
+finally
+    HTTPClient.Free;
+end;
+
+end;
+
+
+
+
+end.

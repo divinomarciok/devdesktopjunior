@@ -2,8 +2,8 @@ object FormEndereco: TFormEndereco
   Left = 0
   Top = 0
   Caption = 'Formulario'
-  ClientHeight = 374
-  ClientWidth = 277
+  ClientHeight = 501
+  ClientWidth = 318
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,30 +13,36 @@ object FormEndereco: TFormEndereco
   OnCreate = FormCreate
   TextHeight = 15
   object btnCriaTabelaTspdCep: TButton
-    Left = 128
-    Top = 16
-    Width = 153
-    Height = 18
-    Caption = 'Cria Tabela "TspdCEP"'
+    Left = 165
+    Top = 10
+    Width = 146
+    Height = 27
+    Caption = '2 - Cria Tabela "TspdCEP"'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
     OnClick = btnCriaTabelaTspdCepClick
   end
   object edtCep: TLabeledEdit
-    Left = 8
-    Top = 36
-    Width = 105
+    Left = 169
+    Top = 176
+    Width = 142
     Height = 23
     EditLabel.Width = 21
     EditLabel.Height = 15
     EditLabel.Caption = 'CEP'
     TabOrder = 1
-    Text = '75902030'
+    Text = ''
   end
   object memoRetorno: TMemo
     Left = 8
-    Top = 165
-    Width = 261
-    Height = 201
+    Top = 232
+    Width = 303
+    Height = 263
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBackground
     Font.Height = -12
@@ -45,42 +51,142 @@ object FormEndereco: TFormEndereco
     ParentFont = False
     TabOrder = 2
   end
-  object btnCriaEndereco: TButton
-    Left = 128
-    Top = 40
-    Width = 153
-    Height = 16
-    Caption = 'Cria Endereco'
-    TabOrder = 3
-    OnClick = btnCriaEnderecoClick
-  end
   object btnConsultaSalva: TButton
-    Left = 8
-    Top = 65
-    Width = 89
-    Height = 25
-    Caption = 'Consulta API'
-    TabOrder = 4
+    Left = 169
+    Top = 204
+    Width = 142
+    Height = 22
+    Caption = 'Consulta CEP na API'
+    TabOrder = 3
     OnClick = btnConsultaSalvaClick
   end
   object edtUf: TLabeledEdit
-    Left = 8
-    Top = 112
-    Width = 89
+    Left = 9
+    Top = 178
+    Width = 146
     Height = 23
     EditLabel.Width = 14
     EditLabel.Height = 15
     EditLabel.Caption = 'UF'
-    TabOrder = 5
+    TabOrder = 4
     Text = ''
   end
-  object Button1: TButton
-    Left = 128
-    Top = 111
-    Width = 141
-    Height = 25
-    Caption = 'Consulta Banco'
+  object ConsultaCepBanco: TButton
+    Left = 9
+    Top = 204
+    Width = 146
+    Height = 22
+    Caption = 'Consulta CEP por UF BD'
+    TabOrder = 5
+    OnClick = ConsultaCepBancoClick
+  end
+  object pnConfigBD: TPanel
+    Left = 8
+    Top = 43
+    Width = 303
+    Height = 110
     TabOrder = 6
-    OnClick = Button1Click
+    Visible = False
+    object edtNomeBD: TLabeledEdit
+      Left = 8
+      Top = 26
+      Width = 136
+      Height = 23
+      EditLabel.Width = 58
+      EditLabel.Height = 12
+      EditLabel.Caption = 'Nome Banco'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -10
+      EditLabel.Font.Name = 'Segoe UI'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      TabOrder = 0
+      Text = ''
+    end
+    object btnUserBD: TLabeledEdit
+      Left = 150
+      Top = 26
+      Width = 137
+      Height = 23
+      EditLabel.Width = 35
+      EditLabel.Height = 12
+      EditLabel.Caption = 'User BD'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -10
+      EditLabel.Font.Name = 'Segoe UI'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      TabOrder = 1
+      Text = ''
+    end
+    object LabeledEdit3: TLabeledEdit
+      Left = 8
+      Top = 61
+      Width = 135
+      Height = 23
+      EditLabel.Width = 43
+      EditLabel.Height = 12
+      EditLabel.Hint = '*'
+      EditLabel.Caption = 'Senha BD'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -10
+      EditLabel.Font.Name = 'Segoe UI'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      EditLabel.ParentShowHint = False
+      EditLabel.ShowHint = False
+      TabOrder = 2
+      Text = ''
+    end
+    object edrPortBD: TLabeledEdit
+      Left = 149
+      Top = 61
+      Width = 136
+      Height = 23
+      EditLabel.Width = 39
+      EditLabel.Height = 12
+      EditLabel.Caption = 'Porta BD'
+      EditLabel.Font.Charset = DEFAULT_CHARSET
+      EditLabel.Font.Color = clWindowText
+      EditLabel.Font.Height = -10
+      EditLabel.Font.Name = 'Segoe UI'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      TabOrder = 3
+      Text = ''
+    end
+    object btnConfigBD: TButton
+      Left = 80
+      Top = 85
+      Width = 129
+      Height = 18
+      Caption = 'OK Config'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -10
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      OnClick = btnConfigBDClick
+    end
+  end
+  object btnConfiguraBanco: TButton
+    Left = 8
+    Top = 10
+    Width = 140
+    Height = 27
+    Caption = '1- Configura BD'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+    OnClick = btnConfiguraBancoClick
   end
 end

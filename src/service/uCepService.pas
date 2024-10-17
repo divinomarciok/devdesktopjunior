@@ -12,8 +12,7 @@ private
 public
 
 function ConsultaCep(const ACep: string): TEndereco_class;
-function ConsultaCepUf(const AUf: string): TEndereco_class;
-procedure criaEndereco;
+procedure criaEnderecoTesTe;
 
 end;
 
@@ -22,8 +21,6 @@ var
  Endereco: TEndereco_class;
 
 implementation
-
-
 
 
 function TCepService.ConsultaCep(const ACep :string): TEndereco_class;
@@ -66,7 +63,6 @@ try
 
               Result := Endereco;
 
-
             end;
 
           finally
@@ -85,30 +81,8 @@ end;
 end;
 
 
-function TCepService.ConsultaCepUf(const AUf: string): TEndereco_class;
-var
-ListaEnderecos : TList<TEndereco_class>;
-EnderecoUF: TEndereco_class;
 
-uf : string;
-I: Integer;
-begin
-  uf:= AUf;
-
-  ListaEnderecos:=  moduloSQL.SelectCePUf(uf);
-
-for EnderecoUF in ListaEnderecos do
-begin
-
-end;
-
-
-
-
-end;
-
-
-procedure TCepService.criaEndereco;
+procedure TCepService.criaEnderecoTesTe;
 begin
 try
  Endereco := TEndereco_class.Create(
@@ -123,8 +97,6 @@ try
     '11',
     '7107'
   );
-
-
 
  if Endereco.cep <> '' then
  begin

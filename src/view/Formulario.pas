@@ -3,24 +3,32 @@ unit Formulario;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,System.Generics.Collections,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, moduleSQL,uCepService, Vcl.Mask, Vcl.ExtCtrls,Endereco_class;
 type
   TFormEndereco = class(TForm)
     btnCriaTabelaTspdCep: TButton;
     edtCep: TLabeledEdit;
     memoRetorno: TMemo;
-    btnCriaEndereco: TButton;
     btnConsultaSalva: TButton;
     edtUf: TLabeledEdit;
-    Button1: TButton;
- 
+    ConsultaCepBanco: TButton;
+    pnConfigBD: TPanel;
+    btnConfiguraBanco: TButton;
+    edtNomeBD: TLabeledEdit;
+    btnUserBD: TLabeledEdit;
+    LabeledEdit3: TLabeledEdit;
+    edrPortBD: TLabeledEdit;
+    btnConfigBD: TButton;
+
     procedure FormCreate(Sender: TObject);
 
     procedure btnCriaTabelaTspdCepClick(Sender: TObject);
-    procedure btnCriaEnderecoClick(Sender: TObject);
+
     procedure btnConsultaSalvaClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure ConsultaCepBancoClick(Sender: TObject);
+    procedure btnConfiguraBancoClick(Sender: TObject);
+    procedure btnConfigBDClick(Sender: TObject);
   private
     FURLConsulta: string;
   public
@@ -35,6 +43,19 @@ implementation
 {$R *.dfm}
 
 
+
+procedure TFormEndereco.btnConfigBDClick(Sender: TObject);
+begin
+  pnConfigBD.Visible := False;
+end;
+
+procedure TFormEndereco.btnConfiguraBancoClick(Sender: TObject);
+begin
+
+  // Definir o formulário como pai
+  pnConfigBD.Visible := True;
+
+end;
 
 procedure TFormEndereco.btnConsultaSalvaClick(Sender: TObject);
 var
@@ -55,26 +76,35 @@ begin
 
 end;
 
-procedure TFormEndereco.btnCriaEnderecoClick(Sender: TObject);
-begin
-try
-      CepService.criaEndereco;
-except
-  on E: Exception do
-    ShowMessage('Erro ao criar objeto endereco : '+E.Message);
-  end;
 
-
-end;
 
 procedure TFormEndereco.btnCriaTabelaTspdCepClick(Sender: TObject);
 begin
     moduloSQL.CriarTabelaEndereco;
 end;
 
-procedure TFormEndereco.Button1Click(Sender: TObject);
+procedure TFormEndereco.ConsultaCepBancoClick(Sender: TObject);
+var
+EnderecoUF : TEndereco_class;
+ListaEnderecosUF : TList<TEndereco_class>;
+ I : Integer;
 begin
-    CepService.ConsultaCepUf('GO');
+
+    ListaEnderecosUF := moduloSQL.SelectCePUf(edtUf.Text);
+
+    memoRetorno.Clear;
+    if ListaEnderecosUF.Count > 0 then
+    begin
+
+      for I := 0 to ListaEnderecosUF.Count -1 do
+      begin
+        EnderecoUF := ListaEnderecosUF[I];
+        memoRetorno.Lines.Add ('CEP : '+EnderecoUF.cep +', UF : '+EnderecoUF.uf)
+      end;
+
+    end;
+
+
 end;
 
 procedure TFormEndereco.FormCreate(Sender: TObject);

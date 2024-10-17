@@ -121,14 +121,15 @@ Endereco_banco : TEndereco_class;
 ListaEnderecos : TList<TEndereco_class>;
 
 begin
+    ListaEnderecos := TList<TEndereco_class>.Create;
 
     QRY_migration.SQL.Text :='SELECT * FROM TspdCep WHERE uf = :UF';
-    QRY_migration.ParamByName('UF').AsString := 'PR';
+    QRY_migration.ParamByName('UF').AsString := AUf;
     QRY_migration.Open;
 
     if not QRY_migration.IsEmpty then
     begin
-      ListaEnderecos := TList<TEndereco_class>.Create;
+
       QRY_migration.First;
 
        while not QRY_migration.Eof do
@@ -145,22 +146,22 @@ begin
          QRY_migration.FieldByName('gia').AsString,
          QRY_migration.FieldByName('ddd').AsString,
          QRY_migration.FieldByName('siafi').AsString
+
          );
 
-         //ShowMessage(Endereco_banco.ToString);
-
          ListaEnderecos.Add(Endereco_banco);
-         Endereco_banco.Free;
+         QRY_migration.Next;
        end;
 
     end
     else
     begin
-      ShowMessage('Sem Resultado para Consulta');
+      ShowMessage('Nenhum resultado de CEP para UF : '+AUf);
     end;
 
-     QRY_migration.Close;
-     Result:=ListaEnderecos;
+    Result:=ListaEnderecos;
+    QRY_migration.Close;
+
 
 end;
 

@@ -12,6 +12,7 @@ private
 public
 
 function ConsultaCep(const ACep: string): TEndereco_class;
+procedure criaEndereco;
 
 end;
 
@@ -30,6 +31,8 @@ HTTPClient: THTTPClient;
 Response: IHTTPResponse;
 JSONValue: TJSONValue;
 URL: string;
+resultado: boolean;
+JCep :string;
 
 begin
      HTTPClient := THTTPClient.Create;
@@ -46,7 +49,8 @@ try
             if JSONValue <> nil then
             begin
 
-              Endereco := TEndereco_class.Create(
+             JCep := JSONValue.GetValue<string>('cep');
+              Endereco := TEndereco_class.Create  (
                 JSONValue.GetValue<string>('cep'),
                 JSONValue.GetValue<string>('logradouro'),
                 JSONValue.GetValue<string>('complemento'),
@@ -60,7 +64,14 @@ try
               );
 
               Result := Endereco;
-              ServiceConexao.InserirEndereco(Endereco);
+
+              resultado := ServiceConexao.InserirouAtualiza(Endereco);
+
+              if resultado then
+              begin
+              //  ShowMessage('Cep Inserido no Banco');
+              end;
+
             end;
 
           finally
@@ -79,6 +90,35 @@ end;
 end;
 
 
+procedure TCepService.criaEndereco;
+begin
+try
+ Endereco := TEndereco_class.Create(
+    '75902030',
+    'Praça da Sé',
+    'Muro Amarelo',
+    'Sé',
+    'São Paulo',
+    'SP',
+    '3550308',
+    '',
+    '11',
+    '7107'
+  );
 
+
+
+ if Endereco.cep <> '' then
+ begin
+   ShowMessage('Endereco Criado');
+   ShowMessage(Endereco.toString);
+ end;
+except
+  on E: Exception do
+    ShowMessage('Erro ao criar objeto endereco : '+E.Message);
+  end;
+
+
+end;
 
 end.

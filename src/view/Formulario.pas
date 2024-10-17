@@ -7,13 +7,17 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, moduleSQL,uCepService, Vcl.Mask, Vcl.ExtCtrls,Endereco_class;
 type
   TFormEndereco = class(TForm)
-    Button1: TButton;
-    btnConsultaAPI: TButton;
+    btnCriaTabelaTspdCep: TButton;
     edtCep: TLabeledEdit;
-    Memo1: TMemo;
-    procedure Button1Click(Sender: TObject);
+    memoRetorno: TMemo;
+    btnCriaEndereco: TButton;
+    btnConsultaSalva: TButton;
+ 
     procedure FormCreate(Sender: TObject);
-    procedure btnConsultaAPIClick(Sender: TObject);
+
+    procedure btnCriaTabelaTspdCepClick(Sender: TObject);
+    procedure btnCriaEnderecoClick(Sender: TObject);
+    procedure btnConsultaSalvaClick(Sender: TObject);
   private
     FURLConsulta: string;
   public
@@ -28,26 +32,39 @@ implementation
 
 {$R *.dfm}
 
-procedure TFormEndereco.btnConsultaAPIClick(Sender: TObject);
+
+
+
+
+procedure TFormEndereco.btnConsultaSalvaClick(Sender: TObject);
 var
 
 EnderecoObjeto: TEndereco_class;
 begin
    EnderecoObjeto := CepService.consultaCep(edtCep.Text);
+    memoRetorno.Text := EnderecoObjeto.ToString;
 
-   ShowMessage(EnderecoObjeto.cep);
 end;
 
-procedure TFormEndereco.Button1Click(Sender: TObject);
+procedure TFormEndereco.btnCriaEnderecoClick(Sender: TObject);
+begin
+try
+      CepService.criaEndereco;
+except
+  on E: Exception do
+    ShowMessage('Erro ao criar objeto endereco : '+E.Message);
+  end;
+
+
+end;
+
+procedure TFormEndereco.btnCriaTabelaTspdCepClick(Sender: TObject);
 begin
     ServiceConexao.CriarTabelaEndereco;
 end;
 
-
-
 procedure TFormEndereco.FormCreate(Sender: TObject);
 begin
-//      ServiceDB.ConectaBancoPostgres;
       ServiceConexao.ConectaBancoPostgres;
 end;
 

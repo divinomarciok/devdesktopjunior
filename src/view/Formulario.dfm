@@ -2,8 +2,8 @@ object FormEndereco: TFormEndereco
   Left = 0
   Top = 0
   Caption = 'Formulario'
-  ClientHeight = 300
-  ClientWidth = 683
+  ClientHeight = 374
+  ClientWidth = 277
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,42 +12,55 @@ object FormEndereco: TFormEndereco
   Font.Style = []
   OnCreate = FormCreate
   TextHeight = 15
-  object Button1: TButton
-    Left = 424
-    Top = 224
-    Width = 201
-    Height = 41
-    Caption = 'Conecta ao banco'
+  object btnCriaTabelaTspdCep: TButton
+    Left = 96
+    Top = 16
+    Width = 153
+    Height = 18
+    Caption = 'Cria Tabela "TspdCEP"'
     TabOrder = 0
-    OnClick = Button1Click
-  end
-  object btnConsultaAPI: TButton
-    Left = 24
-    Top = 176
-    Width = 105
-    Height = 25
-    Caption = 'Consulta API'
-    TabOrder = 1
-    OnClick = btnConsultaAPIClick
+    OnClick = btnCriaTabelaTspdCepClick
   end
   object edtCep: TLabeledEdit
-    Left = 24
-    Top = 56
+    Left = 40
+    Top = 72
     Width = 185
     Height = 23
     EditLabel.Width = 21
     EditLabel.Height = 15
     EditLabel.Caption = 'CEP'
-    TabOrder = 2
-    Text = ''
+    TabOrder = 1
+    Text = '75902030'
   end
-  object Memo1: TMemo
-    Left = 184
-    Top = 113
-    Width = 169
-    Height = 145
-    Lines.Strings = (
-      'Memo1')
+  object memoRetorno: TMemo
+    Left = 8
+    Top = 165
+    Width = 261
+    Height = 201
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBackground
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+  end
+  object btnCriaEndereco: TButton
+    Left = 152
+    Top = 40
+    Width = 97
+    Height = 16
+    Caption = 'Cria Endereco'
     TabOrder = 3
+    OnClick = btnCriaEnderecoClick
+  end
+  object btnConsultaSalva: TButton
+    Left = 72
+    Top = 101
+    Width = 114
+    Height = 25
+    Caption = 'Consulta e Salva '
+    TabOrder = 4
+    OnClick = btnConsultaSalvaClick
   end
 end

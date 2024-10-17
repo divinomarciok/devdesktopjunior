@@ -24,7 +24,7 @@ type
     procedure ConectaBancoPostgres;
     procedure CriarTabelaEndereco;
     function ConsultaBancoCep(const ACep: string): TEndereco_class;
-    function InserirEndereco(const Endereco: TEndereco_class): boolean;
+    function InserirouAtualiza(const Endereco: TEndereco_class): boolean;
   end;
 
 var
@@ -44,7 +44,7 @@ try
       ConexaoDB.Params.Add('Port=5432');
       ConexaoDB.Connected := True;
 
-      ShowMessage('conectado ao banco');
+     // ShowMessage('conectado ao banco');
 
   except on E: Exception do
     ShowMessage('Erro ao conectar com banco de dados ' +E.Message);
@@ -57,10 +57,10 @@ procedure TServiceConexao.CriarTabelaEndereco;
 begin
   try
 
-   QRY_migration.SQL.Text :=
+     QRY_migration.SQL.Text :=
       'CREATE TABLE IF NOT EXISTS TspdCep  (' +
       'ID SERIAL PRIMARY KEY, ' +
-      'cep VARCHAR(9), ' +
+      'cep VARCHAR(9) UNIQUE, ' +
       'logradouro VARCHAR(100), ' +
       'complemento VARCHAR(100), ' +
       'bairro VARCHAR(100), ' +
@@ -74,45 +74,24 @@ begin
 
     QRY_migration.ExecSQL;
 
-    ShowMessage('Tabela Endereco criada com sucesso.');
+    ShowMessage('Tabela "TspdCep" criada com sucesso!');
   except
     on E: Exception do
-      ShowMessage('Erro ao criar tabela: ' + E.Message);
+      ShowMessage('Erro ao criar tabela : ' + E.Message);
   end;
 end;
 
-{function TServiceConexao.InserirEndereco(const Endereco: TEndereco_class): boolean;
-var
-Query:  TFDQuery;
+
+
+function TServiceConexao.InserirouAtualiza(const Endereco: TEndereco_class): boolean;
 begin
-
-Query := TFDQuery.Create(nil);
-
-Query.Connection := ConexaoDB;
-
-try
-
-finally
-
-end;
-
-end;   }
-
-
-function TServiceConexao.InserirEndereco(const Endereco: TEndereco_class): boolean;
-var
-
-resultado : boolean;
-
-begin
-
 try
   QRY_migration.SQL.Text := 'INSERT INTO TspdCep (cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd) ' +
-                      'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd) '; {+
+                      'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd) ' +
                       'ON CONFLICT (cep) DO UPDATE SET ' +
                       'logradouro = EXCLUDED.logradouro, complemento = EXCLUDED.complemento, ' +
                       'bairro = EXCLUDED.bairro, localidade = EXCLUDED.localidade, uf = EXCLUDED.uf, ' +
-                      'ibge = EXCLUDED.ibge, ddd = EXCLUDED.ddd';  }
+                      'ibge = EXCLUDED.ibge, ddd = EXCLUDED.ddd';
 
     QRY_migration.ParamByName('cep').AsString := Endereco.cep;
     QRY_migration.ParamByName('logradouro').AsString := Endereco.logradouro;
@@ -123,9 +102,10 @@ try
     QRY_migration.ParamByName('ibge').AsString := Endereco.ibge;
     QRY_migration.ParamByName('ddd').AsString := Endereco.ddd;
     QRY_migration.ExecSQL;
+    Result:= True;
   except
     on E: Exception do
-      ShowMessage('Erro ao Salvar no banco: ' + E.Message);
+      ShowMessage('Erro ao Inserir Registro SQL : ' + E.Message);
    end;
 end;
 

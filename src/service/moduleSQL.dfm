@@ -1,18 +1,17 @@
 object ServiceConexao: TServiceConexao
-  Height = 750
-  Width = 1000
-  PixelsPerInch = 120
+  Height = 600
+  Width = 800
   object ConexaoDB: TFDConnection
-    Left = 240
-    Top = 280
+    Left = 192
+    Top = 224
   end
   object FDPhysPgDriverLink: TFDPhysPgDriverLink
-    Left = 384
-    Top = 312
+    Left = 307
+    Top = 250
   end
   object QRY_migration: TFDQuery
     Connection = ConexaoDB
-    Left = 456
-    Top = 392
+    Left = 365
+    Top = 314
   end
 end

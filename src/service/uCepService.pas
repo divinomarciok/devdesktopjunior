@@ -2,21 +2,17 @@ unit uCepService;
 
 interface
 uses
-System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs;
-
-
+System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs,moduleSQL,System.Generics.Collections;
 
 type
 TCepService = class
 
+private
+
 public
 
-EnderecoViaCep: TEndereco_class;
-//procedure consultaCep(const ACep: string);
-procedure criaEndereco;
-
 function ConsultaCep(const ACep: string): TEndereco_class;
-
+procedure criaEnderecoTesTe;
 
 end;
 
@@ -27,28 +23,14 @@ var
 implementation
 
 
-procedure TCepService.criaEndereco;
-begin
-
-Endereco := TEndereco_class.Create(    '01001-000',    // cep
-    'Praça da Sé',  // logradouro
-    '',             // complemento
-    'Sé',           // bairro
-    'São Paulo',    // localidade
-    'SP',           // uf
-    '3550308',      // ibge
-    '',             // gia
-    '11',           // ddd
-    '7107'          // siafi
-    );
-end;
-
 function TCepService.ConsultaCep(const ACep :string): TEndereco_class;
 var
 HTTPClient: THTTPClient;
 Response: IHTTPResponse;
 JSONValue: TJSONValue;
 URL: string;
+resultado: boolean;
+JCep :string;
 
 begin
      HTTPClient := THTTPClient.Create;
@@ -65,7 +47,8 @@ try
             if JSONValue <> nil then
             begin
 
-              Endereco := TEndereco_class.Create(
+             JCep := JSONValue.GetValue<string>('cep');
+              Endereco := TEndereco_class.Create  (
                 JSONValue.GetValue<string>('cep'),
                 JSONValue.GetValue<string>('logradouro'),
                 JSONValue.GetValue<string>('complemento'),
@@ -79,25 +62,12 @@ try
               );
 
               Result := Endereco;
+
             end;
 
           finally
            JSONVAlue.Free;
           end;
-
-          {try
-             if Assigned(JSONValue) then
-             begin
-
-               ShowMessage('Logradouro: ' + JSONValue.GetValue<string>('logradouro') + sLineBreak +
-                      'Bairro: ' + JSONValue.GetValue<string>('bairro') + sLineBreak +
-                      'Localidade: ' + JSONValue.GetValue<string>('localidade') + sLineBreak +
-                      'UF: ' + JSONValue.GetValue<string>('uf'));
-             end;
-
-          finally
-            JSONValue.Free;
-          end; }
 
         end
         else
@@ -112,5 +82,33 @@ end;
 
 
 
+procedure TCepService.criaEnderecoTesTe;
+begin
+try
+ Endereco := TEndereco_class.Create(
+    '75902030',
+    'Praça da Sé',
+    'Muro Amarelo',
+    'Sé',
+    'São Paulo',
+    'SP',
+    '3550308',
+    '',
+    '11',
+    '7107'
+  );
+
+ if Endereco.cep <> '' then
+ begin
+   ShowMessage('Endereco Criado');
+   ShowMessage(Endereco.toString);
+ end;
+except
+  on E: Exception do
+    ShowMessage('Erro ao criar objeto endereco : '+E.Message);
+  end;
+
+
+end;
 
 end.

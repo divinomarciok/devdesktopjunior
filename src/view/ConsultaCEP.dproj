@@ -131,7 +131,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\model\Endereco_class.pas"/>
-        <DCCReference Include="..\service\DataConexao.pas">
+        <DCCReference Include="..\service\moduleSQL.pas">
             <Form>ServiceConexao</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>

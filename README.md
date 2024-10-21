@@ -18,6 +18,9 @@
 
 
 #1- Executar o projeto na pasta "view" chamado ConsultaCep.
+
 #2- Na pasta service, configurar as variáveis de banco de dados no arquivo "moduleSQL"
+
 #3- Compilar o projeto.
+
 #4- Consultar CEP

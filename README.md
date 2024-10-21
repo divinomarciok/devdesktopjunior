@@ -7,7 +7,7 @@
 
 #Consultar CEP: O método ConsultarCep consome a API ViaCEP para obter dados de um CEP e #salvar na tabela TspdCep.
 #Gerenciamento de CEPs: O projeto salva novos CEPs no banco de dados e atualiza informações #existentes, se necessário.
-#Consulta por estado: Exemplo de select que retorna todos os CEPs do estado do Paraná (PR).
+#Consulta por estado: Exemplo de select que retorna todos os CEPs do estado selecionado
 
 
 #Collections de Teste: Inclui uma collection para realizar testes de consulta por CEP e #logradouro utilizando a API ViaCEP.

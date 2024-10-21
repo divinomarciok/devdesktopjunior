@@ -13,13 +13,6 @@ type
     btnConsultaSalva: TButton;
     edtUf: TLabeledEdit;
     ConsultaCepBanco: TButton;
-    pnConfigBD: TPanel;
-    btnConfiguraBanco: TButton;
-    edtNomeBD: TLabeledEdit;
-    btnUserBD: TLabeledEdit;
-    LabeledEdit3: TLabeledEdit;
-    edrPortBD: TLabeledEdit;
-    btnConfigBD: TButton;
 
     procedure FormCreate(Sender: TObject);
 
@@ -27,8 +20,8 @@ type
 
     procedure btnConsultaSalvaClick(Sender: TObject);
     procedure ConsultaCepBancoClick(Sender: TObject);
-    procedure btnConfiguraBancoClick(Sender: TObject);
-    procedure btnConfigBDClick(Sender: TObject);
+
+
   private
     FURLConsulta: string;
   public
@@ -44,25 +37,13 @@ implementation
 
 
 
-procedure TFormEndereco.btnConfigBDClick(Sender: TObject);
-begin
-  pnConfigBD.Visible := False;
-end;
-
-procedure TFormEndereco.btnConfiguraBancoClick(Sender: TObject);
-begin
-
-  // Definir o formulário como pai
-  pnConfigBD.Visible := True;
-
-end;
 
 procedure TFormEndereco.btnConsultaSalvaClick(Sender: TObject);
 var
 EnderecoObjeto: TEndereco_class;
 begin
 
-   EnderecoObjeto := CepService.consultaCep(edtCep.Text);
+   EnderecoObjeto := CepService.ConsultaCep(edtCep.Text);
 
    if moduloSQL.InserirouAtualiza(EnderecoObjeto) then
    begin
@@ -77,22 +58,23 @@ begin
 end;
 
 
-
 procedure TFormEndereco.btnCriaTabelaTspdCepClick(Sender: TObject);
 begin
     moduloSQL.CriarTabelaEndereco;
 end;
 
+
 procedure TFormEndereco.ConsultaCepBancoClick(Sender: TObject);
 var
 EnderecoUF : TEndereco_class;
 ListaEnderecosUF : TList<TEndereco_class>;
- I : Integer;
+I : Integer;
 begin
 
     ListaEnderecosUF := moduloSQL.SelectCePUf(edtUf.Text);
 
     memoRetorno.Clear;
+
     if ListaEnderecosUF.Count > 0 then
     begin
 

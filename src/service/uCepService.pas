@@ -2,7 +2,8 @@ unit uCepService;
 
 interface
 uses
-System.SysUtils,System.Net.HttpClient,Endereco_class,System.JSON,Dialogs,moduleSQL,System.Generics.Collections;
+System.SysUtils,System.Net.HttpClient,Endereco_class,
+System.JSON,Dialogs,moduleSQL,System.Generics.Collections;
 
 type
 TCepService = class
@@ -12,6 +13,7 @@ private
 public
 
 function ConsultaCep(const ACep: string): TEndereco_class;
+
 procedure criaEnderecoTesTe;
 
 end;
@@ -79,7 +81,6 @@ finally
 end;
 
 end;
-
 
 
 procedure TCepService.criaEnderecoTesTe;

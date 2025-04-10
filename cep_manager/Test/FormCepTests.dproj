@@ -94,6 +94,8 @@
         </DCCReference>
         <DCCReference Include="TestserviceApiCep.pas"/>
         <DCCReference Include="..\src\services\serviceApiCep.pas"/>
+        <DCCReference Include="TestUtilities.pas"/>
+        <DCCReference Include="..\src\utils\Utilities.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls,serviceApiCep,AddressClass;
+  Vcl.Controls, Utilities,Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls,serviceApiCep,AddressClass;
 
 type
   TFormCepManager = class(TForm)
@@ -13,6 +13,7 @@ type
     btnConsultaBD: TButton;
     btnConsultaApi: TButton;
     memoReturn: TMemo;
+    btnSalve: TButton;
     procedure btnConsultaBDClick(Sender: TObject);
   private
     { Private declarations }
@@ -32,10 +33,17 @@ procedure TFormCepManager.btnConsultaBDClick(Sender: TObject);
 var
 AddresObject : TAddressClass;
 serviceApi : TServiceApiCep;
+UtilitiesObject : TUtilities;
 begin
 
-   AddresObject := serviceApi.fetchCep(edtCep.Text);
+  UtilitiesObject := TUtilities.Create;
+
+    if UtilitiesObject.isCEPValid(edtCep.Text) then
+    begin
+    AddresObject := serviceApi.fetchCep(edtCep.Text);
     memoReturn.Text := AddresObject.ToString;
+    end;
+
 
 end;
 

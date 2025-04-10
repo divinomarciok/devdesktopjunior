@@ -21,7 +21,9 @@ uses
   TestAddresModuleDAO in 'TestAddresModuleDAO.pas',
   AddresModuleDAO in '..\src\repository\AddresModuleDAO.pas',
   TestserviceApiCep in 'TestserviceApiCep.pas',
-  serviceApiCep in '..\src\services\serviceApiCep.pas';
+  serviceApiCep in '..\src\services\serviceApiCep.pas',
+  TestUtilities in 'TestUtilities.pas',
+  Utilities in '..\src\utils\Utilities.pas';
 
 {$R *.RES}
 

@@ -126,7 +126,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="src\view\UnitViewCep.pas">
+        <DCCReference Include="UnitViewCep.pas">
             <Form>FormCepManager</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -137,6 +137,7 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="src\services\serviceApiCep.pas"/>
+        <DCCReference Include="src\utils\Utilities.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

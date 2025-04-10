@@ -2,10 +2,11 @@ program FormCep;
 
 uses
   Vcl.Forms,
-  UnitViewCep in 'src\view\UnitViewCep.pas' {FormCepManager},
+  UnitViewCep in 'UnitViewCep.pas' {FormCepManager},
   AddressClass in 'src\model\AddressClass.pas',
   AddresModuleDAO in 'src\repository\AddresModuleDAO.pas' {AddressModule: TDataModule},
-  serviceApiCep in 'src\services\serviceApiCep.pas';
+  serviceApiCep in 'src\services\serviceApiCep.pas',
+  Utilities in 'src\utils\Utilities.pas';
 
 {$R *.res}
 

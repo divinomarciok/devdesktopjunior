@@ -63,4 +63,12 @@ object FormCepManager: TFormCepManager
     ParentFont = False
     TabOrder = 4
   end
+  object btnSalve: TButton
+    Left = 136
+    Top = 135
+    Width = 121
+    Height = 35
+    Caption = 'Salva no Banco'
+    TabOrder = 5
+  end
 end

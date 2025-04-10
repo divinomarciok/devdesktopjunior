@@ -1,0 +1,43 @@
+unit AddressDAO; // Alterado o nome da unit para AddressDAO
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys,
+  FireDAC.DApt, FireDAC.Comp.Client, AddressClass; // Importe sua classe de endereço
+
+type
+  TAdressDAO = class // Alterado o nome da classe para TAdressDAO
+  private
+    FConnection: TFDConnection;
+    function Inserir(const AEndereco: TAdrressClass): Boolean;
+    function Atualizar(const AEndereco: TAdrressClass): Boolean;
+  public
+    constructor Create(AConnection: TFDConnection);
+    destructor Destroy; override;
+
+    function Salvar(const AEndereco: TAdrressClass): Boolean;
+    function BuscarPorCep(const ACep: string): TAdrressClass;
+    function ListarPorUf(const AUf: string): TFDQuery; // Retorna um TFDQuery com os resultados
+  end;
+
+implementation
+
+uses
+  Data.DB, FireDAC.Comp.DataSet;
+
+{ TAdressDAO } // Alterado o nome da classe para TAdressDAO
+
+constructor TAdressDAO.Create(AConnection: TFDConnection); // Alterado o nome da classe para TAdressDAO
+begin
+  FConnection := AConnection;
+end;
+
+destructor TAdressDAO.Destroy; // Alterado o nome da classe para TAdressDAO
+begin
+  FConnection := nil;
+  inherited;
+end;
+
+end.

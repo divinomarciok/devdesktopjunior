@@ -24,9 +24,9 @@ type
 
   procedure connectDatabase;
   function initialTables_create():Boolean;
-  function insertAddress(const AEndereco: TAdrressClass):Boolean;
-  function updateAddress(const AEndereco:  TAdrressClass):Boolean;
-  function listByUf(const AUf: string): TList<TAdrressClass>;
+  function insertAddress(const AEndereco: TAddressClass):Boolean;
+  function updateAddress(const AEndereco:  TAddressClass):Boolean;
+  function listByUf(const AUf: string): TList<TAddressClass>;
 
   constructor Create(AOwner: TComponent; AConnection: TFDConnection = nil);
   property InjectConnection : TFDConnection read FInjectConnection write FInjectConnection;
@@ -100,7 +100,7 @@ begin
   end;
 end;
 
-function TAddressModule.insertAddress(const AEndereco: TAdrressClass): Boolean;
+function TAddressModule.insertAddress(const AEndereco: TAddressClass): Boolean;
 begin
   DBQuery := TFDQuery.Create(nil);
   try
@@ -133,7 +133,7 @@ begin
 end;
 
 
-function TAddressModule.updateAddress(const AEndereco: TAdrressClass): Boolean;
+function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
   begin
   try
     DBQuery.Connection := InjectConnection;
@@ -160,14 +160,14 @@ function TAddressModule.updateAddress(const AEndereco: TAdrressClass): Boolean;
 end;
 
 
-function TAddressModule.listByUf(const AUf: string): TList<TAdrressClass>;
+function TAddressModule.listByUf(const AUf: string): TList<TAddressClass>;
 var
 
-AddresObject : TAdrressClass;
-ListAddress : TList<TAdrressClass>;
+AddresObject : TAddressClass;
+ListAddress : TList<TAddressClass>;
 
 begin
-  ListAddress := TList<TAdrressClass>.Create(nil);
+  ListAddress := TList<TAddressClass>.Create(nil);
   DBQuery.Connection := InjectConnection;
   DBQuery.SQL.Text := 'SELECT cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd ' +
                      'FROM TspdCep WHERE uf = :uf';
@@ -180,7 +180,7 @@ begin
        while not DBQuery.Eof do
        begin
 
-         AddresObject := TAdrressClass.Create(
+         AddresObject := TAddressClass.Create(
          DBQuery.FieldByName('cep').AsString,
          DBQuery.FieldByName('logradouro').AsString,
          DBQuery.FieldByName('complemento').AsString,

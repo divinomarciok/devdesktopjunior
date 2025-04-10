@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   UnitViewCep in 'src\view\UnitViewCep.pas' {FormCepManager},
   AddressClass in 'src\model\AddressClass.pas',
-  AddresModuleDAO in 'src\repository\AddresModuleDAO.pas' {AddressModule: TDataModule};
+  AddresModuleDAO in 'src\repository\AddresModuleDAO.pas' {AddressModule: TDataModule},
+  serviceApiCep in 'src\services\serviceApiCep.pas';
 
 {$R *.res}
 
@@ -13,6 +14,5 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFormCepManager, FormCepManager);
   Application.CreateForm(TAddressModule, AddressModule);
-
   Application.Run;
 end.

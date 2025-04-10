@@ -19,7 +19,7 @@ type
 
   TestTAdrressClass = class(TTestCase)
   strict private
-    FAdrressClass: TAdrressClass;
+    FAdrressClass: TAddressClass;
   public
     procedure SetUp; override;
     procedure TearDown; override;
@@ -31,7 +31,7 @@ implementation
 
 procedure TestTAdrressClass.SetUp;
 begin
-  FAdrressClass := TAdrressClass.Create('12345-678', 'Rua das Flores, 123', 'Apto 101', 'Jardim Alegre',
+  FAdrressClass := TAddressClass.Create('12345-678', 'Rua das Flores, 123', 'Apto 101', 'Jardim Alegre',
     'São Paulo', 'SP', '3550308', '', '11', '8976');
 end;
 

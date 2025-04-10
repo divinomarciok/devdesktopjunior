@@ -92,6 +92,8 @@
         <DCCReference Include="..\src\repository\AddresModuleDAO.pas">
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="TestserviceApiCep.pas"/>
+        <DCCReference Include="..\src\services\serviceApiCep.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

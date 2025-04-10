@@ -19,7 +19,9 @@ uses
   TestAddressClass in 'TestAddressClass.pas',
   AddressClass in '..\src\model\AddressClass.pas',
   TestAddresModuleDAO in 'TestAddresModuleDAO.pas',
-  AddresModuleDAO in '..\src\repository\AddresModuleDAO.pas';
+  AddresModuleDAO in '..\src\repository\AddresModuleDAO.pas',
+  TestserviceApiCep in 'TestserviceApiCep.pas',
+  serviceApiCep in '..\src\services\serviceApiCep.pas';
 
 {$R *.RES}
 

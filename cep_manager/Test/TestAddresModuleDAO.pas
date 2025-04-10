@@ -93,22 +93,42 @@ end;
 
 procedure TestTAddressModule.TestconnectDatabase;
 begin
-
   Check(FAddressModule.Injectconnection.Connected, 'A conexão com o banco de dados falhou.');
 end;
 
+
 procedure TestTAddressModule.TestinitialTables_create;
+var
+  Query: TFDQuery;
+  TableExists: Boolean;
 begin
-  FAddressModule.initialTables_create;
+
+  if not FTestConnection.Connected then
+    FTestConnection.Connected := True;
+
+  Query := TFDQuery.Create(nil);
+  try
+    Query.Connection := FTestConnection;
+
+    Query.SQL.Text :=
+      'SELECT name FROM sqlite_master WHERE type=''table'' AND name=''TspdCep'';';
+    Query.Open();
+
+    TableExists := not Query.IsEmpty;
+  finally
+    Query.Free;
+  end;
+
+  CheckTrue(TableExists, 'Falha ao verificar a criação da tabela TspdCep.');
 end;
 
 procedure TestTAddressModule.TestinsertAddress;
 var
   ReturnValue: Boolean;
-  AEndereco: TAdrressClass;
+  AEndereco: TAddressClass;
 begin
 
- AEndereco := TAdrressClass.Create('12345-678', 'Rua de Teste', 'Complemento Teste', 'Bairro Teste',
+ AEndereco := TAddressClass.Create('12345-678', 'Rua de Teste', 'Complemento Teste', 'Bairro Teste',
     'Cidade Teste', 'TT', '1234567', '', '99', '9876');
 
   ReturnValue :=  FAddressModule.insertAddress(AEndereco);
@@ -119,10 +139,10 @@ end;
 procedure TestTAddressModule.TestupdateAddress;
 var
   ReturnValue: Boolean;
-  AEndereco: TAdrressClass;
+  AEndereco: TAddressClass;
      begin
 
- AEndereco := TAdrressClass.Create('12345-678', 'Rua de Teste Atualiza', 'Complemento Teste Atualizado', 'Bairro Teste Atualizado',
+ AEndereco := TAddressClass.Create('12345-678', 'Rua de Teste Atualiza', 'Complemento Teste Atualizado', 'Bairro Teste Atualizado',
     'Cidade Teste Atualizada', 'TT', '1234567', '', '99', '9876');
     ReturnValue:= FAddressModule.updateAddress(AEndereco);
     CheckTrue(ReturnValue,' Update dos valores teste falou.');

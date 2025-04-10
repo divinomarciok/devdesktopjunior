@@ -6,7 +6,7 @@ uses
   System.SysUtils, Dialogs;
 
 type
-  TAdrressClass = class
+  TAddressClass = class
   private
     FCep: string;
     FLogradouro: string;
@@ -37,7 +37,7 @@ type
 
 implementation
 
-constructor TAdrressClass.Create(const ACep, ALogradouro, AComplemento, ABairro,
+constructor TAddressClass.Create(const ACep, ALogradouro, AComplemento, ABairro,
   ALocalidade, AUf, AIbge, AGia, ADdd, ASiafi: string);
 begin
   FCep := ACep;
@@ -53,7 +53,7 @@ begin
 end;
 
 
-function TAdrressClass.ToString: string;
+function TAddressClass.ToString: string;
 begin
   Result := Format('%s CEP: %s %s Logradouro: %s %s Complemento: %s %s Bairro: %s %s Localidade: %s %s UF: %s %s IBGE: %s %s GIA: %s %s DDD: %s %s SIAFI: %s %s',
                   [sLineBreak, FCep, sLineBreak, FLogradouro, sLineBreak, FComplemento,

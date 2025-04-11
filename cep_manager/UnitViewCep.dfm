@@ -2,8 +2,8 @@ object FormCepManager: TFormCepManager
   Left = 0
   Top = 0
   Caption = 'FormCepManager'
-  ClientHeight = 322
-  ClientWidth = 353
+  ClientHeight = 426
+  ClientWidth = 337
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,11 +12,24 @@ object FormCepManager: TFormCepManager
   Font.Style = []
   OnCreate = FormCreate
   TextHeight = 15
+  object lblTitle: TLabel
+    Left = 98
+    Top = 12
+    Width = 157
+    Height = 21
+    Caption = 'Consulta CEP "ViaCep"'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
   object edtUf: TLabeledEdit
-    Left = 216
-    Top = 48
-    Width = 121
-    Height = 23
+    Left = 14
+    Top = 104
+    Width = 151
+    Height = 27
     EditLabel.Width = 14
     EditLabel.Height = 15
     EditLabel.Caption = 'UF'
@@ -24,10 +37,10 @@ object FormCepManager: TFormCepManager
     Text = 'GO'
   end
   object edtCep: TLabeledEdit
-    Left = 8
-    Top = 48
-    Width = 121
-    Height = 23
+    Left = 14
+    Top = 53
+    Width = 151
+    Height = 28
     EditLabel.Width = 21
     EditLabel.Height = 15
     EditLabel.Caption = 'CEP'
@@ -35,28 +48,28 @@ object FormCepManager: TFormCepManager
     Text = '75902653'
   end
   object btnConsultaBD: TButton
-    Left = 8
-    Top = 88
-    Width = 121
-    Height = 25
+    Left = 185
+    Top = 51
+    Width = 141
+    Height = 30
     Caption = 'Consulta CEP API'
     TabOrder = 2
     OnClick = btnConsultaBDClick
   end
   object btnConsultaCepUF: TButton
-    Left = 216
-    Top = 88
-    Width = 121
-    Height = 25
+    Left = 185
+    Top = 102
+    Width = 138
+    Height = 29
     Caption = 'Consulta CEP p/ UF'
     TabOrder = 3
     OnClick = btnConsultaCepUFClick
   end
   object memoReturn: TMemo
-    Left = 16
-    Top = 176
+    Left = 8
+    Top = 152
     Width = 321
-    Height = 129
+    Height = 266
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
@@ -64,14 +77,5 @@ object FormCepManager: TFormCepManager
     Font.Style = []
     ParentFont = False
     TabOrder = 4
-  end
-  object btnSalve: TButton
-    Left = 24
-    Top = 135
-    Width = 121
-    Height = 35
-    Caption = 'Salva no Banco'
-    TabOrder = 5
-    OnClick = btnSalveClick
   end
 end

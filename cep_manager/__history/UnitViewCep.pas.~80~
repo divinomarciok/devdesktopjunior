@@ -46,12 +46,26 @@ implementation
 procedure TFormCepManager.btnConsultaCepUFClick(Sender: TObject);
 var
 
- ListAddress : TList<TAddressClass> ;
+ ListAddressByUf : TList<TAddressClass>;
+ I: Integer;
+ Addres :TAddressClass;
 
 begin
 
-  ShowMessage(edtUf.Text);
-  ListAddress := AddressDAO.listByUf(edtUf.Text);
+  //ShowMessage(edtUf.Text);
+  ListAddressByUf := AddressDAO.listByUf(edtUf.Text);
+  memoReturn.Clear;
+
+    if ListAddressByUf.Count > 0 then
+    begin
+
+      for I := 0 to ListAddressByUf.Count -1 do
+      begin
+        Addres := ListAddressByUf[I];
+        memoReturn.Lines.Add ('CEP : '+Addres.cep +', UF : '+Addres.uf)
+      end;
+
+    end;
 
 end;
 
@@ -73,6 +87,7 @@ end;
 procedure TFormCepManager.btnSalveClick(Sender: TObject);
 begin
      AddressDAO.insertAddress(AddresObject);
+     AddresObject.CleanupInstance;
 
 end;
 

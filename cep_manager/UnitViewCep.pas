@@ -14,7 +14,7 @@ type
     btnConsultaBD: TButton;
     btnConsultaCepUF: TButton;
     memoReturn: TMemo;
-    btnSalve: TButton;
+    lblTitle: TLabel;
     procedure btnConsultaBDClick(Sender: TObject);
     procedure updateScreen(Aretorno: string);
     procedure btnSalveClick(Sender: TObject);
@@ -52,7 +52,6 @@ var
 
 begin
 
-  //ShowMessage(edtUf.Text);
   ListAddressByUf := AddressDAO.listByUf(edtUf.Text);
   memoReturn.Clear;
 
@@ -70,25 +69,12 @@ begin
 end;
 
 
-  {memoReturn.Clear;
-
-    if ListAddressByUf.Count > 0 then
-    begin
-
-      for I := 0 to ListAddressByUf.Count -1 do
-      begin
-        AddresObject := ListAddressByUf[I];
-        memoReturn.Lines.Add ('CEP : '+AddresObject.cep +', UF : '+AddresObject.uf)
-      end;
-
-    end; }
 
 
 procedure TFormCepManager.btnSalveClick(Sender: TObject);
 begin
      AddressDAO.insertAddress(AddresObject);
      AddresObject.CleanupInstance;
-
 end;
 
 procedure TFormCepManager.FormCreate(Sender: TObject);
@@ -119,7 +105,17 @@ begin
         if AddresObject <> nil then
         begin
            updateScreen(AddresObject.ToString);
+
+            if AddressDAO.cepExists(AddresObject.Cep) then
+            begin
+                 AddressDAO.updateAddress(AddresObject);
+            end
+            else
+            AddressDAO.insertAddress(AddresObject);
+
         end;
+
+
     end;
 
     except

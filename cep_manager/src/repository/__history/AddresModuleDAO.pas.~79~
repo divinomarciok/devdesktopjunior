@@ -27,6 +27,7 @@ type
   function insertAddress(const AEndereco: TAddressClass):Boolean;
   function updateAddress(const AEndereco:  TAddressClass):Boolean;
   function listByUf(const AUf: string): TList<TAddressClass>;
+  function cepExists(const ACep: string): Boolean;
 
   constructor Create(AOwner: TComponent; AConnection: TFDConnection = nil);
   property InjectConnection : TFDConnection read FInjectConnection write FInjectConnection;
@@ -78,17 +79,16 @@ begin
   try
     DBQuery.Connection := InjectConnection;
 
-    // Verifica qual é o driver de banco de dados sendo usado
     if InjectConnection.DriverName = 'SQLite' then
     begin
-      // Consulta para SQLite
+
       DBQuery.SQL.Text := 'SELECT name FROM sqlite_master WHERE type=''table'' AND name=''TspdCep''';
       DBQuery.Open();
       TableExists := not DBQuery.IsEmpty;
     end
     else
     begin
-      // Consulta para PostgreSQL
+
       DBQuery.SQL.Text := 'SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = ''tspdcep'')';
       DBQuery.Open();
       TableExists := DBQuery.Fields[0].AsBoolean;
@@ -98,7 +98,7 @@ begin
 
     if not TableExists then
     begin
-      // Criar a tabela se ela não existir
+
       if InjectConnection.DriverName = 'SQLite' then
       begin
         DBQuery.SQL.Text :=
@@ -135,13 +135,12 @@ begin
       end;
 
       DBQuery.ExecSQL;
-      // Opcional: pode comentar para os testes
-      // ShowMessage('Tabela "TspdCep" criada com sucesso!');
+       // ShowMessage('Tabela "TspdCep" criada com sucesso');
     end
     else
     begin
-      // Opcional: pode comentar para os testes
-      // ShowMessage('Tabela "TspdCep" já existe.');
+
+      // ShowMessage('Tabela "TspdCep" ja existe.');
     end;
     Result := True;
   except on E: Exception do
@@ -152,53 +151,13 @@ begin
   DBQuery.Free;
 end;
 
-{function TAddressModule.initialTables_create: Boolean;
-begin
-  Result := False;
-  DBQuery := TFDQuery.Create(nil);
-  try
-    DBQuery.Connection := InjectConnection;
-
-
-    DBQuery.SQL.Text := 'SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = ''tspdcep'')';
-    DBQuery.Open();
-    if not DBQuery.Fields[0].AsBoolean then
-    begin
-      DBQuery.SQL.Text :=
-        'CREATE TABLE IF NOT EXISTS TspdCep  (' +
-        'ID SERIAL PRIMARY KEY, ' +
-        'cep VARCHAR(9) UNIQUE, ' +
-        'logradouro VARCHAR(100), ' +
-        'complemento VARCHAR(100), ' +
-        'bairro VARCHAR(100), ' +
-        'localidade VARCHAR(100), ' +
-        'uf VARCHAR(2), ' +
-        'ibge VARCHAR(7), ' +
-        'gia VARCHAR(5), ' +
-        'ddd VARCHAR(3), ' +
-        'siafi VARCHAR(5)' +
-        ')';
-      DBQuery.ExecSQL;
-      ShowMessage('Tabela "TspdCep" criada com sucesso!');
-    end
-    else
-    begin
-      ShowMessage('Tabela "TspdCep" já existe.');
-    end;
-    Result := True;
-  except on E: Exception do
-    ShowMessage('Erro ao verificar ou criar tabela "TspdCep": ' + E.Message);
-  end;
-    DBQuery.Close;
-    DBQuery.Free;
-
-end;}
 
 function TAddressModule.insertAddress(const AEndereco: TAddressClass): Boolean;
 begin
   Result:= False;
+   DBQuery := TFDQuery.Create(nil);
   try
-    DBQuery := TFDQuery.Create(nil);
+
     DBQuery.Connection := InjectConnection;
     DBQuery.SQL.Text := 'INSERT INTO TspdCep (cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd) ' +
                        'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd)';
@@ -220,7 +179,6 @@ begin
       begin
 
         ShowMessage('Falha ao salvar endereço ' + E.Message);
-        //Result := False;
         DBQuery.Free;
       end;
 
@@ -231,6 +189,7 @@ end;
 
 function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
   begin
+   DBQuery := TFDQuery.Create(nil);
   try
     DBQuery.Connection := InjectConnection;
     DBQuery.SQL.Text := 'UPDATE TspdCep SET logradouro = :logradouro, complemento = :complemento, bairro = :bairro, ' +
@@ -256,6 +215,27 @@ function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
 end;
 
 
+function TAddressModule.cepExists(const ACep: string): Boolean;
+begin
+  Result := False;
+
+  if ACep = '' then
+    Exit;
+
+  DBQuery := TFDQuery.Create(nil);
+  try
+    DBQuery.Connection := InjectConnection;
+    DBQuery.SQL.Text := 'SELECT COUNT(*) FROM TspdCep WHERE cep = :cep';
+    DBQuery.ParamByName('cep').AsString := ACep;
+    DBQuery.Open;
+
+    // Se o contador for maior que 0, o CEP existe
+    Result := DBQuery.Fields[0].AsInteger > 0;
+  finally
+    DBQuery.Free;
+  end;
+end;
+
 function TAddressModule.listByUf(const AUf: string): TList<TAddressClass>;
 
 var
@@ -265,7 +245,6 @@ ListAddress : TList<TAddressClass>;
 
 begin
   DBQuery := TFDQuery.Create(nil);
-  //ShowMessage('oi');
   ListAddress := TList<TAddressClass>.Create();
   DBQuery.Connection := InjectConnection;
   DBQuery.SQL.Text :='SELECT * FROM TspdCep WHERE uf = :UF';

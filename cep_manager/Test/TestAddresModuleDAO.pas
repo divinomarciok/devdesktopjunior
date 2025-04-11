@@ -38,6 +38,7 @@ type
     procedure TestinsertAddress;
     procedure TestupdateAddress;
     procedure TestlistByUf;
+    procedure TestcepExists;
   end;
 
 implementation
@@ -70,6 +71,29 @@ begin
          ShowMessage('Test - Erro ao apagar tabela TspdCep ')
        end;
     end;
+end;
+
+
+procedure TestTAddressModule.TestcepExists;
+var
+  AEndereco: TAddressClass;
+  Existe: Boolean;
+begin
+
+  AEndereco := TAddressClass.Create('99999-999', 'Rua Teste CEP', 'Complemento', 'Bairro',
+    'Cidade', 'UF', '1234567', '', '11', '1234');
+  try
+    FAddressModule.insertAddress(AEndereco);
+
+
+    Existe := FAddressModule.cepExists('99999-999');
+    CheckTrue(Existe, 'O método cepExists deveria retornar True para um CEP existente.');
+
+        Existe := FAddressModule.cepExists('00000-000');
+    CheckFalse(Existe, 'O método cepExists deveria retornar False para um CEP inexistente.');
+  finally
+    AEndereco.Free;
+  end;
 end;
 
 procedure TestTAddressModule.TearDown;

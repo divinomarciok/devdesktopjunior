@@ -27,6 +27,7 @@ type
   function insertAddress(const AEndereco: TAddressClass):Boolean;
   function updateAddress(const AEndereco:  TAddressClass):Boolean;
   function listByUf(const AUf: string): TList<TAddressClass>;
+  function cepExists(const ACep: string): Boolean;
 
   constructor Create(AOwner: TComponent; AConnection: TFDConnection = nil);
   property InjectConnection : TFDConnection read FInjectConnection write FInjectConnection;
@@ -154,8 +155,9 @@ end;
 function TAddressModule.insertAddress(const AEndereco: TAddressClass): Boolean;
 begin
   Result:= False;
+   DBQuery := TFDQuery.Create(nil);
   try
-    DBQuery := TFDQuery.Create(nil);
+
     DBQuery.Connection := InjectConnection;
     DBQuery.SQL.Text := 'INSERT INTO TspdCep (cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd) ' +
                        'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd)';
@@ -187,6 +189,7 @@ end;
 
 function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
   begin
+   DBQuery := TFDQuery.Create(nil);
   try
     DBQuery.Connection := InjectConnection;
     DBQuery.SQL.Text := 'UPDATE TspdCep SET logradouro = :logradouro, complemento = :complemento, bairro = :bairro, ' +
@@ -201,6 +204,7 @@ function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
     DBQuery.ParamByName('ibge').AsString := AEndereco.Ibge;
     DBQuery.ParamByName('ddd').AsString := AEndereco.Ddd;
     DBQuery.Execute();
+    ShowMessage('Cep Atualizado');
     Result := True;
   except
     on E: Exception do
@@ -211,6 +215,26 @@ function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
   end;
 end;
 
+
+function TAddressModule.cepExists(const ACep: string): Boolean;
+begin
+  Result := False;
+
+  if ACep = '' then
+    Exit;
+
+  DBQuery := TFDQuery.Create(nil);
+  try
+    DBQuery.Connection := InjectConnection;
+    DBQuery.SQL.Text := 'SELECT COUNT(*) FROM TspdCep WHERE cep = :cep';
+    DBQuery.ParamByName('cep').AsString := ACep;
+    DBQuery.Open;
+
+    Result := DBQuery.Fields[0].AsInteger > 0;
+  finally
+    DBQuery.Free;
+  end;
+end;
 
 function TAddressModule.listByUf(const AUf: string): TList<TAddressClass>;
 

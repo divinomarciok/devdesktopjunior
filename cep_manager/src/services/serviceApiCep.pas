@@ -11,15 +11,18 @@ private
 
 public
 
-function fetchCep(const ACep: string): TAddressClass;
+function checkCep(const ACep: string): TAddressClass;
+function JsonHaveErro(const AJSONValue: TJSONValue): Boolean;
 
 end;
 
 implementation
 
 
-function TServiceApiCep.fetchCep(const ACep: string):TAddressClass;
+
+function TServiceApiCep.checkCep(const ACep: string):TAddressClass;
 var
+
 HTTPClient: THTTPClient;
 Response: IHTTPResponse;
 JSONValue: TJSONValue;
@@ -29,20 +32,25 @@ AddressObject: TAddressClass;
 
 begin
      HTTPClient := THTTPClient.Create;
-try
+    try
        URL :='https://viacep.com.br/ws/' + ACep + '/json';
        Response := HTTPClient.Get(URL);
+
        if Response.StatusCode = 200 then
         begin
 
-          JSONValue := TJSONObject.ParseJSONValue(Response.ContentAsString);
+        JSONValue := TJSONObject.ParseJSONValue(Response.ContentAsString);
 
-          try
+            if JsonHaveErro(JSONValue) then
+             begin
+              ShowMessage('Numero de CEP Informado sem retorno na API : Não existe');
+              Result:= nil;
+              end
+             else
+             begin
 
-            if JSONValue <> nil then
-            begin
+            JCep := JSONValue.GetValue<string>('cep');
 
-             JCep := JSONValue.GetValue<string>('cep');
               AddressObject := TAddressClass.Create  (
                 JSONValue.GetValue<string>('cep'),
                 JSONValue.GetValue<string>('logradouro'),
@@ -58,20 +66,34 @@ try
 
               Result := AddressObject;
 
-            end;
-
-          finally
-           JSONVAlue.Free;
-          end;
-
-        end
-        else
-        begin
-          raise Exception.Create('Erro na consulta da API STATUS CODE >>  ' + IntToStr(Response.StatusCode));;
+             end;
         end;
-finally
-    HTTPClient.Free;
+  except
+    on E: Exception do
+      begin
+         ShowMessage('Erro ao consultar API : '+E.Message);
+      end;
+  end;
 end;
+
+function TServiceApiCep.JsonHaveErro(const AJSONValue: TJSONValue): Boolean;
+var
+  JSONObject: TJSONObject;
+  ErroValue: TJSONValue;
+begin
+  Result := False;
+  if AJSONValue is TJSONObject then
+  begin
+    JSONObject := AJSONValue as TJSONObject;
+    if JSONObject.TryGetValue('erro', ErroValue) then
+    begin
+      if (ErroValue is TJSONString) and (TJSONString(ErroValue).Value.ToLower = 'true') then
+      begin
+        Result := True;
+      end;
+    end;
+  end;
 end;
+
 
 end.

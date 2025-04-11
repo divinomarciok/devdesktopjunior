@@ -20,9 +20,9 @@ type
 
   private
   FInjectConnection: TFDConnection;
-  public
 
-  procedure connectDatabase;
+  public
+  function connectDatabase():Boolean;
   function initialTables_create():Boolean;
   function insertAddress(const AEndereco: TAddressClass):Boolean;
   function updateAddress(const AEndereco:  TAddressClass):Boolean;
@@ -48,62 +48,114 @@ begin
 end;
 
 
-procedure TAddressModule.connectDatabase;
+
+function TAddressModule.connectDatabase:Boolean;
 begin
+Result := False;
 try
       ConnectDB.DriverName := 'PG';
-      ConnectDB.Params.Database := 'EnderecosViaCep';
+      ConnectDB.Params.Database := 'AddressDB';
       ConnectDB.Params.UserName := 'postgres';
       ConnectDB.Params.Password := 'postgres';
       ConnectDB.Params.Add('Server=localhost');
       ConnectDB.Params.Add('Port=5432');
       ConnectDB.Connected := True;
-
+      Result:=True;
 
   except on E: Exception do
      ShowMessage('Falha ao connectar no banco >> '+ ConnectDB.Params.Database +'>> '+E.Message);
+
   end;
 end;
 
-function TAddressModule.initialTables_create:Boolean;
+function TAddressModule.initialTables_create: Boolean;
+var
+  Query: string;
+  TableExists: Boolean;
 begin
- try
-    DBQuery := TFDQuery.Create(nil);
-
+  Result := False;
+  DBQuery := TFDQuery.Create(nil);
+  try
     DBQuery.Connection := InjectConnection;
-    if not Assigned(InjectConnection) then
-      ShowMessage('Injectconnection is NIL!');
 
-   DBQuery.SQL.Text :=
-      'CREATE TABLE IF NOT EXISTS TspdCep  (' +
-      'ID SERIAL PRIMARY KEY, ' +
-      'cep VARCHAR(9) UNIQUE, ' +
-      'logradouro VARCHAR(100), ' +
-      'complemento VARCHAR(100), ' +
-      'bairro VARCHAR(100), ' +
-      'localidade VARCHAR(100), ' +
-      'uf VARCHAR(2), ' +
-      'ibge VARCHAR(7), ' +
-      'gia VARCHAR(5), ' +
-      'ddd VARCHAR(3), ' +
-      'siafi VARCHAR(5)' +
-      ')';
+    if InjectConnection.DriverName = 'SQLite' then
+    begin
 
-    DBQuery.ExecSQL;
+      DBQuery.SQL.Text := 'SELECT name FROM sqlite_master WHERE type=''table'' AND name=''TspdCep''';
+      DBQuery.Open();
+      TableExists := not DBQuery.IsEmpty;
+    end
+    else
+    begin
+
+      DBQuery.SQL.Text := 'SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = ''tspdcep'')';
+      DBQuery.Open();
+      TableExists := DBQuery.Fields[0].AsBoolean;
+    end;
+
     DBQuery.Close;
 
-    //ShowMessage('Migration initial create "TspdCep" executada com sucesso!');
-    Result:=true;
+    if not TableExists then
+    begin
+
+      if InjectConnection.DriverName = 'SQLite' then
+      begin
+        DBQuery.SQL.Text :=
+          'CREATE TABLE IF NOT EXISTS TspdCep (' +
+          'ID INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+          'cep VARCHAR(9) UNIQUE, ' +
+          'logradouro VARCHAR(100), ' +
+          'complemento VARCHAR(100), ' +
+          'bairro VARCHAR(100), ' +
+          'localidade VARCHAR(100), ' +
+          'uf VARCHAR(2), ' +
+          'ibge VARCHAR(7), ' +
+          'gia VARCHAR(5), ' +
+          'ddd VARCHAR(3), ' +
+          'siafi VARCHAR(5)' +
+          ')';
+      end
+      else
+      begin
+        DBQuery.SQL.Text :=
+          'CREATE TABLE IF NOT EXISTS TspdCep (' +
+          'ID SERIAL PRIMARY KEY, ' +
+          'cep VARCHAR(9) UNIQUE, ' +
+          'logradouro VARCHAR(100), ' +
+          'complemento VARCHAR(100), ' +
+          'bairro VARCHAR(100), ' +
+          'localidade VARCHAR(100), ' +
+          'uf VARCHAR(2), ' +
+          'ibge VARCHAR(7), ' +
+          'gia VARCHAR(5), ' +
+          'ddd VARCHAR(3), ' +
+          'siafi VARCHAR(5)' +
+          ')';
+      end;
+
+      DBQuery.ExecSQL;
+       // ShowMessage('Tabela "TspdCep" criada com sucesso');
+    end
+    else
+    begin
+
+      // ShowMessage('Tabela "TspdCep" ja existe.');
+    end;
+    Result := True;
   except on E: Exception do
-    ShowMessage('Erro ao criar tabelas' + E.Message);
-    //
+    ShowMessage('Erro ao verificar ou criar tabela "TspdCep": ' + E.Message);
   end;
+
+  DBQuery.Close;
+  DBQuery.Free;
 end;
+
 
 function TAddressModule.insertAddress(const AEndereco: TAddressClass): Boolean;
 begin
-  DBQuery := TFDQuery.Create(nil);
+  Result:= False;
   try
+    DBQuery := TFDQuery.Create(nil);
     DBQuery.Connection := InjectConnection;
     DBQuery.SQL.Text := 'INSERT INTO TspdCep (cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd) ' +
                        'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd)';
@@ -117,19 +169,19 @@ begin
     DBQuery.ParamByName('ddd').AsString := AEndereco.Ddd;
     DBQuery.Execute();
     Result := True;
+    ShowMessage('Endereço Salvo com sucesso');
     DBQuery.Free;
-
+    DBQuery.Close();
   except
     on E: Exception do
       begin
 
         ShowMessage('Falha ao salvar endereço ' + E.Message);
-
-        Result := False;
         DBQuery.Free;
       end;
 
   end;
+
 end;
 
 
@@ -161,16 +213,17 @@ end;
 
 
 function TAddressModule.listByUf(const AUf: string): TList<TAddressClass>;
+
 var
 
 AddresObject : TAddressClass;
 ListAddress : TList<TAddressClass>;
 
 begin
-  ListAddress := TList<TAddressClass>.Create(nil);
+  DBQuery := TFDQuery.Create(nil);
+  ListAddress := TList<TAddressClass>.Create();
   DBQuery.Connection := InjectConnection;
-  DBQuery.SQL.Text := 'SELECT cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd ' +
-                     'FROM TspdCep WHERE uf = :uf';
+  DBQuery.SQL.Text :='SELECT * FROM TspdCep WHERE uf = :UF';
   DBQuery.ParamByName('uf').AsString := AUf;
   DBQuery.Open();
 
@@ -203,9 +256,10 @@ begin
       ShowMessage('Nenhum resultado de CEP para UF : '+AUf);
     end;
 
-    Result:=ListAddress;
+    Result := ListAddress;
     DBQuery.Close;
 end;
+
 
 
 {$R *.dfm}

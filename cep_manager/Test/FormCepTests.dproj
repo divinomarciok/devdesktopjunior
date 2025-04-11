@@ -87,7 +87,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="TestAddressClass.pas"/>
-        <DCCReference Include="..\src\model\AddressClass.pas"/>
+        <DCCReference Include="..\src\class\AddressClass.pas"/>
         <DCCReference Include="TestAddresModuleDAO.pas"/>
         <DCCReference Include="..\src\repository\AddresModuleDAO.pas">
             <FormType>dfm</FormType>

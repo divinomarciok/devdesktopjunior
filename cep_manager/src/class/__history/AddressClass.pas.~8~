@@ -1,0 +1,64 @@
+unit AddressClass;
+
+interface
+
+uses
+  System.SysUtils, Dialogs;
+
+type
+  TAddressClass = class
+  private
+    FCep: string;
+    FLogradouro: string;
+    FComplemento: string;
+    FBairro: string;
+    FLocalidade: string;
+    FUf: string;
+    FIbge: string;
+    FGia: string;
+    FDdd: string;
+    FSiafi: string;
+
+  public
+    constructor Create(const ACep, ALogradouro, AComplemento, ABairro,
+                       ALocalidade, AUf, AIbge, AGia, ADdd, ASiafi: string);
+    function ToString: string; override;
+    property Cep: string read FCep write FCep;
+    property Logradouro: string read FLogradouro write FLogradouro;
+    property Complemento: string read FComplemento write FComplemento;
+    property Bairro: string read FBairro write FBairro;
+    property Localidade: string read FLocalidade write FLocalidade;
+    property Uf: string read FUf write FUf;
+    property Ibge: string read FIbge write FIbge;
+    property Gia: string read FGia write FGia;
+    property Ddd: string read FDdd write FDdd;
+    property Siafi: string read FSiafi write FSiafi;
+  end;
+
+implementation
+
+constructor TAddressClass.Create(const ACep, ALogradouro, AComplemento, ABairro,
+  ALocalidade, AUf, AIbge, AGia, ADdd, ASiafi: string);
+begin
+  FCep := ACep;
+  FLogradouro := ALogradouro;
+  FComplemento := AComplemento;
+  FBairro := ABairro;
+  FLocalidade := ALocalidade;
+  FUf := AUf;
+  FIbge := AIbge;
+  FGia := AGia;
+  FDdd := ADdd;
+  FSiafi := ASiafi;
+end;
+
+
+function TAddressClass.ToString: string;
+begin
+  Result := Format('CEP: %s %s Logradouro: %s %s Complemento: %s %s Bairro: %s %s Localidade: %s %s UF: %s %s IBGE: %s %s GIA: %s %s DDD: %s %s SIAFI: %s %s',
+                  [FCep, sLineBreak, FLogradouro, sLineBreak, FComplemento,
+                   sLineBreak, FBairro, sLineBreak, FLocalidade, sLineBreak, FUf,
+                   sLineBreak, FIbge, sLineBreak, FGia, sLineBreak, FDdd, sLineBreak, FSiafi, sLineBreak]);
+end;
+
+end.

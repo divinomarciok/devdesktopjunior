@@ -37,7 +37,7 @@ type
     procedure TestinitialTables_create;
     procedure TestinsertAddress;
     procedure TestupdateAddress;
-  //  procedure TestlistByUf;
+    procedure TestlistByUf;
   end;
 
 implementation
@@ -53,6 +53,7 @@ begin
   FTestConnection.Connected := True;
 
   FAddressModule := TAddressModule.Create (nil, FTestConnection);
+
   if not Assigned(FAddressModule) then
   Fail('Falha ao criar a instância de FAddressModule.');
 
@@ -148,15 +149,51 @@ var
     CheckTrue(ReturnValue,' Update dos valores teste falou.');
 end;
 
-{procedure TestTAddressModule.TestlistByUf;
+procedure TestTAddressModule.TestlistByUf;
 var
-  ReturnValue: TList<>;
-  AUf: string;
+  ReturnList: TList<TAddressClass>;
+  Address1, Address2, Address3: TAddressClass;
+  Address: TAddressClass;
+  UFTestada: string;
+  countAddressUf: Integer;
+  i: Integer;
 begin
-  // TODO: Setup method call parameters
-  ReturnValue := FAddressModule.listByUf(AUf);
-  // TODO: Validate method results
-end;      }
+
+  FAddressModule.initialTables_create;
+  UFTestada := 'SP';
+
+  Address1 := TAddressClass.Create('01234-567', 'Avenida Paulista', 'Conjunto 123', 'Bela Vista',
+    'São Paulo', UFTestada, '3550308', '', '11', '7107');
+  FAddressModule.insertAddress(Address1);
+
+  Address2 := TAddressClass.Create('04567-890', 'Rua Oscar Freire', 'Loja 10', 'Jardins',
+    'São Paulo', UFTestada, '3550308', '', '11', '7107');
+  FAddressModule.insertAddress(Address2);
+
+  Address3 := TAddressClass.Create('20000-000', 'Avenida Atlântica', 'Apto 500', 'Copacabana',
+    'Rio de Janeiro', 'RJ', '3304557', '', '21', '6001');
+  FAddressModule.insertAddress(Address3);
+
+  ReturnList := FAddressModule.listByUf(UFTestada);
+  try
+
+    CheckNotNull(ReturnList, 'A lista retornada não pode ser nil');
+
+
+    CheckEquals(2, ReturnList.Count, 'A lista deve conter exatamente 2 endereços com UF = ' + UFTestada);
+
+    countAddressUf := 0;
+    for i := 0 to ReturnList.Count - 1 do
+    begin
+      Address := ReturnList[i];
+      if Address.Uf = UFTestada then
+        Inc(countAddressUf);
+    end;
+    CheckEquals(ReturnList.Count, countAddressUf);
+  finally;
+
+  end;
+end;
 
 initialization
   // Register any test cases with the test runner

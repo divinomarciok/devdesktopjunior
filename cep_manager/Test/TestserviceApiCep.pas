@@ -38,7 +38,7 @@ var
 
 begin
   ACep:= '33902030';
-  AddressObject := FServiceApiCep.fetchCep(ACep);
+  AddressObject := FServiceApiCep.checkCep(ACep);
 
   CheckTrue( Assigned(AddressObject), 'Nenhum Objeto Address retornado no teste');
   CheckEquals(AddressObject.Cep, '33902-030', 'O CEP retornado não corresponde ao CEP consultado.');
@@ -47,7 +47,7 @@ begin
 end;
 
 initialization
-  // Register any test cases with the test runner
+
   RegisterTest(TestTServiceApiCep.Suite);
 end.
 

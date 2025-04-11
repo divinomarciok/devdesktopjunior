@@ -5,7 +5,7 @@
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">FormCep</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -130,7 +130,7 @@
             <Form>FormCepManager</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\model\AddressClass.pas"/>
+        <DCCReference Include="src\class\AddressClass.pas"/>
         <DCCReference Include="src\repository\AddresModuleDAO.pas">
             <Form>AddressModule</Form>
             <FormType>dfm</FormType>

@@ -213,6 +213,9 @@ function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
         Result := False;
       end;
   end;
+   DBQuery.Free;
+   DBQuery.Close;
+
 end;
 
 
@@ -233,6 +236,7 @@ begin
     Result := DBQuery.Fields[0].AsInteger > 0;
   finally
     DBQuery.Free;
+    DBQuery.Close;
   end;
 end;
 

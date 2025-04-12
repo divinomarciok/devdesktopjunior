@@ -43,7 +43,7 @@ begin
 
             if JsonHaveErro(JSONValue) then
              begin
-              ShowMessage('Numero de CEP Informado sem retorno na API : Não existe');
+              ShowMessage('Retorno OK - Porém sem nenhuma informação [CEP NÂO EXISTE]');
               Result:= nil;
               end
              else
@@ -71,9 +71,10 @@ begin
   except
     on E: Exception do
       begin
-         ShowMessage('Erro ao consultar API : '+E.Message);
+          ShowMessage('Retorno ERRO - '+E.Message);
       end;
   end;
+
 end;
 
 function TServiceApiCep.JsonHaveErro(const AJSONValue: TJSONValue): Boolean;

@@ -13,39 +13,39 @@ object FormCepManager: TFormCepManager
   OnCreate = FormCreate
   TextHeight = 15
   object lblTitle: TLabel
-    Left = 98
-    Top = 12
-    Width = 157
+    Left = 90
+    Top = 8
+    Width = 175
     Height = 21
-    Caption = 'Consulta CEP "ViaCep"'
+    Caption = 'Consulta API  "ViaCep"'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
     Font.Name = 'Segoe UI'
-    Font.Style = []
+    Font.Style = [fsBold]
     ParentFont = False
   end
   object edtUf: TLabeledEdit
     Left = 14
     Top = 104
     Width = 151
-    Height = 27
+    Height = 23
     EditLabel.Width = 14
     EditLabel.Height = 15
     EditLabel.Caption = 'UF'
     TabOrder = 0
-    Text = 'GO'
+    Text = ''
   end
   object edtCep: TLabeledEdit
     Left = 14
     Top = 53
     Width = 151
-    Height = 28
+    Height = 23
     EditLabel.Width = 21
     EditLabel.Height = 15
     EditLabel.Caption = 'CEP'
     TabOrder = 1
-    Text = '75902653'
+    Text = ''
   end
   object btnConsultaBD: TButton
     Left = 185

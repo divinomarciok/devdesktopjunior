@@ -63,11 +63,9 @@ begin
         Addres := ListAddressByUf[I];
         memoReturn.Lines.Add ('CEP : '+Addres.cep +', UF : '+Addres.uf)
       end;
-
-    end;
+     end;
 
 end;
-
 
 
 
@@ -79,7 +77,6 @@ end;
 
 procedure TFormCepManager.FormCreate(Sender: TObject);
 begin
-
     AddressDAO := TAddressModule.Create(Self);
     if( AddressDAO.connectDatabase)then
      AddressDAO.initialTables_create;
@@ -92,15 +89,17 @@ begin
 end;
 
 
-
 procedure TFormCepManager.btnConsultaBDClick(Sender: TObject);
+var
+ cepLesshifem : String;
 begin
+    cepLesshifem := Utilities.removeHifen(edtCep.Text);
 
     try
-    if Utilities.isCEPValid(edtCep.Text) then
-    begin
 
-    AddresObject := serviceApi.checkCep(edtCep.Text);
+    if Utilities.isCEPValid(cepLesshifem) then
+    begin
+    AddresObject := serviceApi.checkCep(cepLesshifem);
 
         if AddresObject <> nil then
         begin
@@ -114,8 +113,6 @@ begin
             AddressDAO.insertAddress(AddresObject);
 
         end;
-
-
     end;
 
     except

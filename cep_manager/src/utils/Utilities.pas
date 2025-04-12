@@ -23,23 +23,16 @@ implementation
 
 function TUtilities.cepLength(const CEP: string):Boolean;
 var
-ReturnValue : Boolean;
 counter : Integer;
 begin
-      counter :=Length(CEP);
-      
-   if counter > 9  then
+Result := True;
+  counter := Length(CEP);
+
+   if counter <> 8  then
    begin
         ShowMessage('Cep deve conter 8 digitos');
         Result := False; 
-   end
-   else if counter < 8 then
-   begin
-        ShowMessage('Cep deve conter 8 digitos');
-        Result := False;
-   end
-   else
-   Result := True;
+   end;
    
 end;
             
@@ -68,24 +61,22 @@ begin
 end;
 
 function TUtilities.isCEPValid(const CEP: string): Boolean;
-var
-  cepLesshifem: string; 
-  begin  
-          
-  cepLesshifem := removeHifen(CEP);   
-  if not justNumbers(cepLesshifem) then
+
+begin
+   Result := True;
+
+  if not justNumbers(CEP) then
   begin   
     Result := False;
     Exit;
-  end;        
+  end;
   
-  if  not cepLength(cepLesshifem) then
+  if  not cepLength(CEP) then
   begin
     Result := False;
-    Exit; 
   end;
 
-  Result := True; 
+
 end;
 
 

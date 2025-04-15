@@ -1,0 +1,295 @@
+unit AddresModuleDAO;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
+  FireDAC.Phys.PGDef, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
+  FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  FireDAC.Phys.PG,Vcl.Dialogs,AddressClass,System.Generics.Collections,
+  FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat,
+  FireDAC.Phys.SQLiteDef, FireDAC.Phys.SQLite;
+
+type
+  TAddressModule = class(TDataModule)
+  ConnectDB: TFDConnection;
+  FDPhysPgDriverLink: TFDPhysPgDriverLink;
+  DBQuery: TFDQuery;
+
+  private
+  FInjectConnection: TFDConnection;
+
+  public
+  function connectDatabase():Boolean;
+  function initialTables_create():Boolean;
+  function insertAddress(const AEndereco: TAddressClass):Boolean;
+  function updateAddress(const AEndereco:  TAddressClass):Boolean;
+  function listByUf(const AUf: string): TList<TAddressClass>;
+  function cepExists(const ACep: string): Boolean;
+
+  constructor Create(AOwner: TComponent; AConnection: TFDConnection = nil);
+  property InjectConnection : TFDConnection read FInjectConnection write FInjectConnection;
+
+  end;
+
+var
+  AddressModule: TAddressModule;
+
+implementation
+
+constructor TAddressModule.Create(AOwner: TComponent; AConnection: TFDConnection = nil);
+begin
+  inherited Create(AOwner);
+  if Assigned(AConnection) then
+    FInjectConnection := AConnection
+  else
+    FInjectConnection := ConnectDB;
+end;
+
+
+
+function TAddressModule.connectDatabase:Boolean;
+begin
+Result := False;
+try
+      ConnectDB.DriverName := 'PG';
+      ConnectDB.Params.Database := 'AddressDB';
+      ConnectDB.Params.UserName := 'postgres';
+      ConnectDB.Params.Password := 'postgres';
+      ConnectDB.Params.Add('Server=localhost');
+      ConnectDB.Params.Add('Port=5432');
+      ConnectDB.Connected := True;
+      Result:=True;
+
+  except on E: Exception do
+     ShowMessage('Falha ao connectar no banco >> '+ ConnectDB.Params.Database +'>> '+E.Message);
+
+  end;
+end;
+
+function TAddressModule.initialTables_create: Boolean;
+var
+  Query: string;
+  TableExists: Boolean;
+begin
+  Result := False;
+  DBQuery := TFDQuery.Create(nil);
+  try
+    DBQuery.Connection := InjectConnection;
+
+    if InjectConnection.DriverName = 'SQLite' then
+    begin
+
+      DBQuery.SQL.Text := 'SELECT name FROM sqlite_master WHERE type=''table'' AND name=''TspdCep''';
+      DBQuery.Open();
+      TableExists := not DBQuery.IsEmpty;
+    end
+    else
+    begin
+
+      DBQuery.SQL.Text := 'SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = ''tspdcep'')';
+      DBQuery.Open();
+      TableExists := DBQuery.Fields[0].AsBoolean;
+    end;
+
+    DBQuery.Close;
+
+    if not TableExists then
+    begin
+
+      if InjectConnection.DriverName = 'SQLite' then
+      begin
+        DBQuery.SQL.Text :=
+          'CREATE TABLE IF NOT EXISTS TspdCep (' +
+          'ID INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+          'cep VARCHAR(9) UNIQUE, ' +
+          'logradouro VARCHAR(100), ' +
+          'complemento VARCHAR(100), ' +
+          'bairro VARCHAR(100), ' +
+          'localidade VARCHAR(100), ' +
+          'uf VARCHAR(2), ' +
+          'ibge VARCHAR(7), ' +
+          'gia VARCHAR(5), ' +
+          'ddd VARCHAR(3), ' +
+          'siafi VARCHAR(5)' +
+          ')';
+      end
+      else
+      begin
+        DBQuery.SQL.Text :=
+          'CREATE TABLE IF NOT EXISTS TspdCep (' +
+          'ID SERIAL PRIMARY KEY, ' +
+          'cep VARCHAR(9) UNIQUE, ' +
+          'logradouro VARCHAR(100), ' +
+          'complemento VARCHAR(100), ' +
+          'bairro VARCHAR(100), ' +
+          'localidade VARCHAR(100), ' +
+          'uf VARCHAR(2), ' +
+          'ibge VARCHAR(7), ' +
+          'gia VARCHAR(5), ' +
+          'ddd VARCHAR(3), ' +
+          'siafi VARCHAR(5)' +
+          ')';
+      end;
+
+      DBQuery.ExecSQL;
+       // ShowMessage('Tabela "TspdCep" criada com sucesso');
+    end
+    else
+    begin
+
+      // ShowMessage('Tabela "TspdCep" ja existe.');
+    end;
+    Result := True;
+  except on E: Exception do
+    ShowMessage('Erro ao verificar ou criar tabela "TspdCep": ' + E.Message);
+  end;
+
+  DBQuery.Close;
+  DBQuery.Free;
+end;
+
+
+function TAddressModule.insertAddress(const AEndereco: TAddressClass): Boolean;
+begin
+  Result:= False;
+   DBQuery := TFDQuery.Create(nil);
+  try
+
+    DBQuery.Connection := InjectConnection;
+    DBQuery.SQL.Text := 'INSERT INTO TspdCep (cep, logradouro, complemento, bairro, localidade, uf, ibge, ddd) ' +
+                       'VALUES (:cep, :logradouro, :complemento, :bairro, :localidade, :uf, :ibge, :ddd)';
+    DBQuery.ParamByName('cep').AsString := AEndereco.Cep;
+    DBQuery.ParamByName('logradouro').AsString := AEndereco.Logradouro;
+    DBQuery.ParamByName('complemento').AsString := AEndereco.Complemento;
+    DBQuery.ParamByName('bairro').AsString := AEndereco.Bairro;
+    DBQuery.ParamByName('localidade').AsString := AEndereco.Localidade;
+    DBQuery.ParamByName('uf').AsString := AEndereco.Uf;
+    DBQuery.ParamByName('ibge').AsString := AEndereco.Ibge;
+    DBQuery.ParamByName('ddd').AsString := AEndereco.Ddd;
+    DBQuery.Execute();
+    Result := True;
+    ShowMessage('Endereço Salvo com sucesso');
+    DBQuery.Free;
+    DBQuery.Close();
+  except
+    on E: Exception do
+      begin
+
+        ShowMessage('Falha ao salvar endereço ' + E.Message);
+        DBQuery.Free;
+      end;
+
+  end;
+
+end;
+
+
+function TAddressModule.updateAddress(const AEndereco: TAddressClass): Boolean;
+  begin
+   DBQuery := TFDQuery.Create(nil);
+  try
+    DBQuery.Connection := InjectConnection;
+    DBQuery.SQL.Text := 'UPDATE TspdCep SET logradouro = :logradouro, complemento = :complemento, bairro = :bairro, ' +
+                       'localidade = :localidade, uf = :uf, ibge = :ibge, ddd = :ddd ' +
+                       'WHERE cep = :cep';
+    DBQuery.ParamByName('cep').AsString := AEndereco.Cep;
+    DBQuery.ParamByName('logradouro').AsString := AEndereco.Logradouro;
+    DBQuery.ParamByName('complemento').AsString := AEndereco.Complemento;
+    DBQuery.ParamByName('bairro').AsString := AEndereco.Bairro;
+    DBQuery.ParamByName('localidade').AsString := AEndereco.Localidade;
+    DBQuery.ParamByName('uf').AsString := AEndereco.Uf;
+    DBQuery.ParamByName('ibge').AsString := AEndereco.Ibge;
+    DBQuery.ParamByName('ddd').AsString := AEndereco.Ddd;
+    DBQuery.Execute();
+    ShowMessage('Cep Atualizado');
+    Result := True;
+  except
+    on E: Exception do
+      begin
+        ShowMessage('Falha ao atualizar o CEP '+ E.Message);
+        Result := False;
+      end;
+  end;
+   DBQuery.Free;
+   DBQuery.Close;
+
+end;
+
+
+function TAddressModule.cepExists(const ACep: string): Boolean;
+begin
+  Result := False;
+
+  if ACep = '' then
+    Exit;
+
+  DBQuery := TFDQuery.Create(nil);
+  try
+    DBQuery.Connection := InjectConnection;
+    DBQuery.SQL.Text := 'SELECT COUNT(*) FROM TspdCep WHERE cep = :cep';
+    DBQuery.ParamByName('cep').AsString := ACep;
+    DBQuery.Open;
+
+    Result := DBQuery.Fields[0].AsInteger > 0;
+  finally
+    DBQuery.Free;
+    DBQuery.Close;
+  end;
+end;
+
+function TAddressModule.listByUf(const AUf: string): TList<TAddressClass>;
+
+var
+
+AddresObject : TAddressClass;
+ListAddress : TList<TAddressClass>;
+
+begin
+  DBQuery := TFDQuery.Create(nil);
+  ListAddress := TList<TAddressClass>.Create();
+  DBQuery.Connection := InjectConnection;
+  DBQuery.SQL.Text :='SELECT * FROM TspdCep WHERE uf = :UF';
+  DBQuery.ParamByName('uf').AsString := AUf;
+  DBQuery.Open();
+
+  if not DBQuery.IsEmpty then
+    begin
+      DBQuery.First;
+       while not DBQuery.Eof do
+       begin
+
+         AddresObject := TAddressClass.Create(
+         DBQuery.FieldByName('cep').AsString,
+         DBQuery.FieldByName('logradouro').AsString,
+         DBQuery.FieldByName('complemento').AsString,
+         DBQuery.FieldByName('bairro').AsString,
+         DBQuery.FieldByName('localidade').AsString,
+         DBQuery.FieldByName('uf').AsString,
+         DBQuery.FieldByName('ibge').AsString,
+         DBQuery.FieldByName('gia').AsString,
+         DBQuery.FieldByName('ddd').AsString,
+         DBQuery.FieldByName('siafi').AsString
+         );
+
+         ListAddress.Add(AddresObject);
+         DBQuery.Next;
+       end;
+
+    end
+    else
+    begin
+      ShowMessage('Nenhum resultado de CEP para UF : '+AUf);
+    end;
+
+    Result := ListAddress;
+    DBQuery.Close;
+end;
+
+
+
+{$R *.dfm}
+
+end.

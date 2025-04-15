@@ -1,0 +1,115 @@
+unit AddressDAO; // Alterado o nome da unit para AddressDAO
+
+interface
+
+uses
+  System.SysUtils,Vcl.Dialogs, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys,
+  FireDAC.DApt, FireDAC.Comp.Client, AddressClass; // Importe sua classe de endereço
+
+type
+  TAdressDAO = class // Alterado o nome da classe para TAdressDAO
+  private
+    FConnection: TFDConnection;
+    LQuery: TFDQuery;
+   function Inserir(const AEndereco: TAdrressClass): Boolean;
+    //function Atualizar(const AEndereco: TAdrressClass): Boolean;
+  public
+    constructor Create(AConnection: TFDConnection);
+    destructor Destroy; override;
+    procedure connectDatabase;
+    procedure initialTables_create;
+
+  //  function Salvar(const AEndereco: TAdrressClass): Boolean;
+//    function BuscarPorCep(const ACep: string): TAdrressClass;
+  //  function ListarPorUf(const AUf: string): TFDQuery; // Retorna um TFDQuery com os resultados
+  end;
+
+implementation
+
+uses
+  Data.DB, FireDAC.Comp.DataSet;
+
+{ TAdressDAO } // Alterado o nome da classe para TAdressDAO
+
+constructor TAdressDAO.Create(AConnection: TFDConnection); // Alterado o nome da classe para TAdressDAO
+begin
+  FConnection := AConnection;
+end;
+
+destructor TAdressDAO.Destroy; // Alterado o nome da classe para TAdressDAO
+begin
+  FConnection := nil;
+  inherited;
+end;
+
+
+procedure TAdressDAO.connectDatabase;
+begin
+try
+      FConnection.DriverName := 'PG';
+      FConnection.Params.Database := 'EnderecosViaCep';
+      FConnection.Params.UserName := 'postgres';
+      FConnection.Params.Password := 'postgres';
+      FConnection.Params.Add('Server=localhost');
+      FConnection.Params.Add('Port=5432');
+      FConnection.Connected := True;
+
+     // ShowMessage('conectado ao banco');
+
+  except on E: Exception do
+     ShowMessage('Falha ao connectar no banco >> '+ FConnection.Params.Database +'>> '+E.Message);
+  end;
+end;
+
+procedure TAdressDAO.initialTables_create;
+begin
+  try
+
+
+     TFDQuery.SQL.Text :=
+      'CREATE TABLE IF NOT EXISTS TspdCep  (' +
+      'ID SERIAL PRIMARY KEY, ' +
+      'cep VARCHAR(9) UNIQUE, ' +
+      'logradouro VARCHAR(100), ' +
+      'complemento VARCHAR(100), ' +
+      'bairro VARCHAR(100), ' +
+      'localidade VARCHAR(100), ' +
+      'uf VARCHAR(2), ' +
+      'ibge VARCHAR(7), ' +
+      'gia VARCHAR(5), ' +
+      'ddd VARCHAR(3), ' +
+      'siafi VARCHAR(5)' +
+      ')';
+
+    TFDQuery.ExecSQL;
+    TFDQuery.Close;
+
+    ShowMessage('Tabela "TspdCep" criada com sucesso!');
+
+  except on E: Exception do
+
+
+  end;
+end;
+
+
+
+
+function TAdressDAO.Inserir(const AEndereco: TAdrressClass): Boolean;
+begin
+
+  try
+    // Código mínimo dentro do try
+    Result := True;
+   except
+     on E: Exception do
+     begin
+      // Nada aqui por enquanto
+     end;
+
+    // Nada aqui por enquanto
+  end;
+end;
+
+end.

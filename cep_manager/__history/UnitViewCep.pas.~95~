@@ -1,0 +1,131 @@
+unit UnitViewCep;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,AddresModuleDAO,
+  Vcl.Controls, Utilities,Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.ExtCtrls,serviceApiCep,AddressClass,
+  System.Generics.Collections;
+
+type
+  TFormCepManager = class(TForm)
+    edtUf: TLabeledEdit;
+    edtCep: TLabeledEdit;
+    btnConsultaBD: TButton;
+    btnConsultaCepUF: TButton;
+    memoReturn: TMemo;
+    lblTitle: TLabel;
+    procedure btnConsultaBDClick(Sender: TObject);
+    procedure updateScreen(Aretorno: string);
+    procedure btnSalveClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnConsultaCepUFClick(Sender: TObject);
+
+
+  private
+    { Private declarations }
+
+     AddressDAO : TAddressModule;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormCepManager: TFormCepManager;
+
+  serviceApi : TServiceApiCep;
+  Utilities : TUtilities;
+  AddresObject : TAddressClass;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TFormCepManager.btnConsultaCepUFClick(Sender: TObject);
+var
+
+ ListAddressByUf : TList<TAddressClass>;
+ I: Integer;
+ Addres :TAddressClass;
+
+begin
+
+  ListAddressByUf := AddressDAO.listByUf(edtUf.Text);
+  memoReturn.Clear;
+
+    if ListAddressByUf.Count > 0 then
+    begin
+
+      for I := 0 to ListAddressByUf.Count -1 do
+      begin
+        Addres := ListAddressByUf[I];
+        memoReturn.Lines.Add ('CEP : '+Addres.cep +', UF : '+Addres.uf)
+      end;
+     end;
+
+end;
+
+
+
+procedure TFormCepManager.btnSalveClick(Sender: TObject);
+begin
+     AddressDAO.insertAddress(AddresObject);
+     AddresObject.CleanupInstance;
+end;
+
+procedure TFormCepManager.FormCreate(Sender: TObject);
+begin
+
+    AddressDAO := TAddressModule.Create(Self);
+    if( AddressDAO.connectDatabase)then
+     AddressDAO.initialTables_create;
+
+end;
+
+procedure TFormCepManager.updateScreen(Aretorno: string);
+begin
+  memoReturn.Text :=Aretorno;
+end;
+
+
+
+procedure TFormCepManager.btnConsultaBDClick(Sender: TObject);
+var
+ cepLesshifem : String;
+begin
+
+    cepLesshifem := Utilities.removeHifen(edtCep.Text);
+
+    try
+
+    if Utilities.isCEPValid(cepLesshifem) then
+
+    begin
+
+    AddresObject := serviceApi.checkCep(cepLesshifem);
+
+        if AddresObject <> nil then
+        begin
+           updateScreen(AddresObject.ToString);
+
+            if AddressDAO.cepExists(AddresObject.Cep) then
+            begin
+                 AddressDAO.updateAddress(AddresObject);
+            end
+            else
+            AddressDAO.insertAddress(AddresObject);
+
+        end;
+
+
+    end;
+
+    except
+      on E: Exception do
+        ShowMessage('View - Falha ao consultar o CEP '+ E.Message);
+    end;
+end;
+
+end.

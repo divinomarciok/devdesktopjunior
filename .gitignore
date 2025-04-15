@@ -1,0 +1,9 @@
+*.dcu
+__history/
+Win32/Debug/
+Win64/Debug/
+Win32/Release/*.exe
+Win64/Release/*.exe
+*.bak
+*.~pas
+*.local

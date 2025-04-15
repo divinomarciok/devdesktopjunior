@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{2F8F7C04-AFCB-497B-98A1-B2EFAEDCF4AF}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="FormCep.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\FormCepTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="FormCep">
+        <MSBuild Projects="FormCep.dproj"/>
+    </Target>
+    <Target Name="FormCep:Clean">
+        <MSBuild Projects="FormCep.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FormCep:Make">
+        <MSBuild Projects="FormCep.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FormCepTests">
+        <MSBuild Projects="Test\FormCepTests.dproj"/>
+    </Target>
+    <Target Name="FormCepTests:Clean">
+        <MSBuild Projects="Test\FormCepTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FormCepTests:Make">
+        <MSBuild Projects="Test\FormCepTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="FormCep;FormCepTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="FormCep:Clean;FormCepTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="FormCep:Make;FormCepTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

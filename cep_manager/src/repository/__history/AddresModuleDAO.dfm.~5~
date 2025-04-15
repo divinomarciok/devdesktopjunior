@@ -1,0 +1,17 @@
+object AddressModule: TAddressModule
+  Height = 600
+  Width = 800
+  object ConnectDB: TFDConnection
+    Left = 179
+    Top = 243
+  end
+  object FDPhysPgDriverLink: TFDPhysPgDriverLink
+    Left = 410
+    Top = 256
+  end
+  object DBQuery: TFDQuery
+    Connection = ConnectDB
+    Left = 218
+    Top = 314
+  end
+end

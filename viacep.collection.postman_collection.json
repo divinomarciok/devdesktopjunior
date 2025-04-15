@@ -1,0 +1,58 @@
+{
+	"info": {
+		"_postman_id": "cdd9b0d7-7852-4b79-8736-55997876e070",
+		"name": "viacep.collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35028437"
+	},
+	"item": [
+		{
+			"name": "Request por CEP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://viacep.com.br/ws/75901-653/json/",
+					"protocol": "https",
+					"host": [
+						"viacep",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"75901-653",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Request por Logradouro",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://viacep.com.br/ws/GO/Rio Verde/Rua Dona Maricota /json/",
+					"protocol": "https",
+					"host": [
+						"viacep",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"GO",
+						"Rio Verde",
+						"Rua Dona Maricota ",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

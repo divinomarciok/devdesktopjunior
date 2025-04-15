@@ -2,8 +2,8 @@ object FormCepManager: TFormCepManager
   Left = 0
   Top = 0
   Caption = 'FormCepManager'
-  ClientHeight = 426
-  ClientWidth = 337
+  ClientHeight = 411
+  ClientWidth = 333
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -69,7 +69,7 @@ object FormCepManager: TFormCepManager
     Left = 8
     Top = 152
     Width = 321
-    Height = 266
+    Height = 249
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
